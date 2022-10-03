@@ -762,7 +762,7 @@ texture = ExtResource( 1 )
 offset = Vector2( 0, 0.507746 )
 hframes = 6
 vframes = 9
-frame = 30
+frame = 33
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -2 )
@@ -788,8 +788,8 @@ anims/WalkUp = SubResource( 10 )
 tree_root = SubResource( 5 )
 anim_player = NodePath("../AnimationPlayer")
 parameters/playback = SubResource( 6 )
-parameters/Attack/blend_position = Vector2( -0.836248, -0.075 )
-parameters/Idle/blend_position = Vector2( -0.00635928, -0.00862074 )
+parameters/Attack/blend_position = Vector2( -0.00317967, -0.780347 )
+parameters/Idle/blend_position = Vector2( -0.00317967, 0.791908 )
 parameters/Walk/blend_position = Vector2( 0.478537, 0.198276 )
 
 [node name="PivotHB" type="Position2D" parent="."]

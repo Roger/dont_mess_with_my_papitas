@@ -1,3 +1,4 @@
+mod title;
 mod game;
 mod hud;
 mod player;
@@ -14,6 +15,7 @@ use gdnative::prelude::{godot_init, InitHandle, Variant};
 
 // Function that registers all exposed classes to Godot
 fn init(handle: InitHandle) {
+    handle.add_class::<title::Title>();
     handle.add_class::<game::Game>();
     handle.add_class::<hud::Hud>();
     handle.add_class::<player::Player>();

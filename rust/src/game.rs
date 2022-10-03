@@ -7,6 +7,7 @@ use rand::prelude::IteratorRandom;
 #[inherit(Node2D)]
 pub struct Game {
     spawn_points: Vec<Vector2>,
+    wave: usize,
 }
 
 #[methods]
@@ -14,6 +15,7 @@ impl Game {
     fn new(_base: &Node2D) -> Self {
         Game {
             spawn_points: Vec::default(),
+            wave: 1,
         }
     }
 
@@ -35,13 +37,25 @@ impl Game {
     }
 
     #[method]
-    fn _on_timeout(&self, #[base] base: &Node2D) {
-        let spawn_point = self
-            .spawn_points
-            .iter()
-            .choose(&mut rand::thread_rng())
-            .unwrap();
+    fn _on_timeout(&mut self, #[base] base: &Node2D) {
+        self.wave += 1;
 
+        let mut rng = rand::thread_rng();
+        let mut spawn_points = self.spawn_points.clone();
+
+        // add 1 slime every 3 waves
+        for _ in 0..(self.wave / 3) + 1 {
+            let amount = spawn_points.len();
+            if amount == 0 {
+                return;
+            }
+            let selected = (0..amount).choose(&mut rng).unwrap();
+            let spawn_point = spawn_points.remove(selected);
+            self.spawn_slime(base, spawn_point);
+        }
+    }
+
+    fn spawn_slime(&mut self, base: &Node2D, spawn_point: Vector2) {
         let slimes = base.expect_node::<Node, _>("%Slimes");
         let rc = ResourceLoader::godot_singleton()
             .load("res://scenes/Slime.tscn", "PackedScene", false)

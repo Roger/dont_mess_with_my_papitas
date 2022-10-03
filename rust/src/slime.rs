@@ -101,8 +101,8 @@ impl Slime {
         let area = unsafe { area.assume_safe() };
         // when the slime enters the game area, reenable the collision
         if area.name().to_string() == "GameArea" {
-            let collision = base.expect_node::<CollisionShape2D, _>("CollisionShape2D");
-            collision.set_disabled(false);
+            // let collision = base.expect_node::<CollisionShape2D, _>("CollisionShape2D");
+            // collision.set_disabled(false);
             return;
         } else if area.name().to_string() != "Hitbox" {
             return;

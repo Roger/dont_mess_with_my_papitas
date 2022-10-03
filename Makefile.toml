@@ -98,7 +98,7 @@ godot --export-debug "Windows Desktop.x86_64-pc-windows-gnu.debug" bin/x86_64-pc
 [tasks.build-x86_64-pc-windows-gnu-release]
 script_runner = "@shell"
 script = '''
-cargo build --target x86_64-pc-windows-gnu 
+cargo build --release --target x86_64-pc-windows-gnu
 if [[ -f lib/x86_64-pc-windows-gnu/*.dll ]]; then
   rm lib/x86_64-pc-windows-gnu/*.dll
 fi

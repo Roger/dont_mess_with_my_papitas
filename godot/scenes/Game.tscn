@@ -26,7 +26,7 @@ outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 7 )
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 160, 89.25 )
+extents = Vector2( 134, 59.5 )
 
 [node name="World" type="Node2D"]
 script = ExtResource( 13 )
@@ -56,7 +56,7 @@ margin_top = -1.0
 margin_right = 7.0
 margin_bottom = 9.0
 custom_fonts/font = SubResource( 2 )
-text = "10"
+text = "1"
 
 [node name="Inventory2" type="Sprite" parent="Hud"]
 position = Vector2( 307, 102 )
@@ -89,14 +89,38 @@ unique_name_in_owner = true
 [node name="Position2D" type="Position2D" parent="SpawnPoints"]
 position = Vector2( -19, 36 )
 
+[node name="Position2D11" type="Position2D" parent="SpawnPoints"]
+position = Vector2( -19, 76 )
+
 [node name="Position2D2" type="Position2D" parent="SpawnPoints"]
 position = Vector2( -19, 137 )
+
+[node name="Position2D12" type="Position2D" parent="SpawnPoints"]
+position = Vector2( -19, 177 )
 
 [node name="Position2D3" type="Position2D" parent="SpawnPoints"]
 position = Vector2( 28, 194 )
 
+[node name="Position2D13" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 76, 194 )
+
+[node name="Position2D14" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 116, 194 )
+
+[node name="Position2D15" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 116, 194 )
+
 [node name="Position2D4" type="Position2D" parent="SpawnPoints"]
 position = Vector2( 164, 195 )
+
+[node name="Position2D16" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 204, 195 )
+
+[node name="Position2D17" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 236, 195 )
+
+[node name="Position2D18" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 236, 195 )
 
 [node name="Position2D5" type="Position2D" parent="SpawnPoints"]
 position = Vector2( 287, 196 )
@@ -108,13 +132,10 @@ position = Vector2( 349, 174 )
 position = Vector2( 354, 98 )
 
 [node name="Position2D8" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 354, 39 )
+position = Vector2( 346, 31 )
 
 [node name="Position2D9" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 302, -11 )
-
-[node name="Position2D10" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 22, -9 )
+position = Vector2( 294, -11 )
 
 [node name="Limits" type="StaticBody2D" parent="."]
 
@@ -202,10 +223,9 @@ position = Vector2( 253, 58 )
 unique_name_in_owner = true
 
 [node name="GameArea" type="Area2D" parent="."]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GameArea"]
-position = Vector2( 160, 90.75 )
+position = Vector2( 160, 96.5 )
 shape = SubResource( 1 )
 
 [connection signal="timeout" from="Timer" to="." method="_on_timeout"]

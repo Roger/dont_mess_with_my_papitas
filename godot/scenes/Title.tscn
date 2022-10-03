@@ -1,26 +1,85 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://assets/Background.png" type="Texture" id=1]
+[ext_resource path="res://assets/title/MenuFondo.png" type="Texture" id=1]
+[ext_resource path="res://assets/title/NewGame.png" type="Texture" id=2]
+[ext_resource path="res://assets/title/NewGameSelect.png" type="Texture" id=3]
+[ext_resource path="res://native/Title.gdns" type="Script" id=4]
+[ext_resource path="res://assets/title/OptionsDesactivadas.png" type="Texture" id=5]
+[ext_resource path="res://assets/About.png" type="Texture" id=6]
+[ext_resource path="res://assets/title/AboutSelect.png" type="Texture" id=7]
+[ext_resource path="res://assets/title/AboutDisplay.png" type="Texture" id=8]
 
-[sub_resource type="Theme" id=1]
+[sub_resource type="Animation" id=1]
+resource_name = "MoveAboutIn"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("About:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, -160 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "MoveAboutOut"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("About:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, -160 ), Vector2( 0, 0 ) ]
+}
 
 [node name="TitleScreen" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+script = ExtResource( 4 )
 
 [node name="TextureRect" type="TextureRect" parent="."]
 margin_right = 40.0
 margin_bottom = 40.0
 texture = ExtResource( 1 )
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-margin_left = 10.0
-margin_right = 40.0
-margin_bottom = 40.0
+[node name="NewGame" type="TextureButton" parent="."]
+margin_top = 112.0
+margin_right = 320.0
+margin_bottom = 158.0
+texture_normal = ExtResource( 2 )
+texture_hover = ExtResource( 3 )
+texture_focused = ExtResource( 3 )
 
-[node name="Label" type="Label" parent="MarginContainer"]
-margin_top = 13.0
-margin_right = 178.0
-margin_bottom = 27.0
-theme = SubResource( 1 )
-text = "Don't mess with my papitas"
+[node name="OptionsDesactivadas" type="Sprite" parent="."]
+position = Vector2( 160, 154 )
+texture = ExtResource( 5 )
+
+[node name="About" type="Node2D" parent="."]
+
+[node name="AboutDisplay" type="Sprite" parent="About"]
+position = Vector2( 160, 251 )
+texture = ExtResource( 8 )
+
+[node name="About" type="TextureButton" parent="About"]
+margin_top = 143.0
+margin_right = 320.0
+margin_bottom = 189.0
+texture_normal = ExtResource( 6 )
+texture_disabled = ExtResource( 7 )
+texture_focused = ExtResource( 7 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/MoveAboutIn = SubResource( 1 )
+anims/MoveAboutOut = SubResource( 2 )
+
+[connection signal="button_up" from="NewGame" to="." method="_on_new_game"]
+[connection signal="button_up" from="About/About" to="." method="_on_about"]
