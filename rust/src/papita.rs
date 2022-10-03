@@ -1,8 +1,9 @@
+use crate::hud;
+use crate::input_const::*;
 use crate::node_ext::NodeExt;
 use gdnative::api::*;
 use gdnative::prelude::*;
 use instant::Instant;
-use crate::input_const::*;
 
 #[derive(NativeClass)]
 #[inherit(Node2D)]
@@ -16,7 +17,7 @@ impl Papita {
     fn new(_base: &Node2D) -> Self {
         Papita {
             life: 3,
-            last_hit: None
+            last_hit: None,
         }
     }
 
@@ -59,6 +60,16 @@ impl Papita {
         let instance = unsafe { instance.assume_safe().cast::<Node2D>().unwrap() };
         instance.set_global_position(base.global_position());
         dirts.add_child(instance, false);
+
+        let hud = unsafe {
+            base.get_node_as_instance::<hud::Hud>("/root//World/Hud")
+                .unwrap()
+        };
+        hud.map_mut(|x, o| {
+            x.update_score(&o, 1);
+        })
+        .ok()
+        .unwrap_or_else(|| godot_print!("Unable to get hud"));
     }
 
     #[method]

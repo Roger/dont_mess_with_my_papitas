@@ -9,6 +9,7 @@ pub struct Hud {
     pub player_life: f32,
     pub coins: i32,
     pub seeds: i32,
+    pub score: i32,
 }
 
 #[methods]
@@ -18,6 +19,7 @@ impl Hud {
             player_life: 100.0,
             coins: 0,
             seeds: 1,
+            score: 0,
         }
     }
 
@@ -50,6 +52,13 @@ impl Hud {
         let seeds = base.expect_node::<Label, _>("Inventory1/SeedsCount");
         seeds.set_text(self.seeds.to_string());
         self.seeds
+    }
+
+    #[method]
+    pub fn update_score(&mut self, #[base] base: &Node, score: i32) {
+        self.score += score;
+        let score = base.expect_node::<Label, _>("Score/Amount");
+        score.set_text(self.score.to_string());
     }
 
 }
