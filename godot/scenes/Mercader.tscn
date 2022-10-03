@@ -1,7 +1,11 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://assets/Mercader.png" type="Texture" id=1]
 [ext_resource path="res://assets/Mesita.png" type="Texture" id=2]
+[ext_resource path="res://assets/Inventario.png" type="Texture" id=3]
+[ext_resource path="res://assets/Semillas.png" type="Texture" id=4]
+[ext_resource path="res://assets/Pixel Sans Serif.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://scenes/Mercader.gdns" type="Script" id=6]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 3.00002
@@ -10,7 +14,15 @@ height = 7.99996
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 17, 11 )
 
-[node name="Mercader" type="StaticBody2D"]
+[sub_resource type="DynamicFont" id=3]
+size = 6
+font_data = ExtResource( 5 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 21.5, 9 )
+
+[node name="Merchant" type="StaticBody2D"]
+script = ExtResource( 6 )
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 0, -11 )
@@ -27,3 +39,37 @@ shape = SubResource( 1 )
 [node name="CollisionMesita" type="CollisionShape2D" parent="."]
 position = Vector2( 26, -9 )
 shape = SubResource( 2 )
+
+[node name="Inventory" type="Sprite" parent="."]
+visible = false
+position = Vector2( -15, -19 )
+scale = Vector2( 0.283987, 0.286329 )
+texture = ExtResource( 3 )
+
+[node name="Seeds" type="Sprite" parent="Inventory"]
+texture = ExtResource( 4 )
+
+[node name="SeedsCount" type="Label" parent="Inventory"]
+visible = false
+margin_left = -6.0
+margin_top = -1.0
+margin_right = 7.0
+margin_bottom = 9.0
+custom_fonts/font = SubResource( 3 )
+text = "10"
+
+[node name="ReferenceRect" type="ReferenceRect" parent="Inventory"]
+margin_left = -8.0
+margin_top = -8.0
+margin_right = 8.0
+margin_bottom = 8.0
+border_color = Color( 0.552941, 0.0352941, 0.0352941, 1 )
+
+[node name="SellArea" type="Area2D" parent="."]
+
+[node name="Collision" type="CollisionShape2D" parent="SellArea"]
+position = Vector2( 15.5, 7 )
+shape = SubResource( 4 )
+
+[connection signal="area_entered" from="SellArea" to="." method="_on_sell_area_entered"]
+[connection signal="area_exited" from="SellArea" to="." method="_on_sell_area_exited"]

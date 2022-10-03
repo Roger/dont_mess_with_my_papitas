@@ -33,7 +33,7 @@ script = ExtResource( 4 )
 texture = ExtResource( 1 )
 
 [node name="Papita" type="Sprite" parent="."]
-position = Vector2( 0, 0.552751 )
+position = Vector2( 0, 0.318139 )
 texture = ExtResource( 3 )
 
 [node name="GrassDown" type="Sprite" parent="."]

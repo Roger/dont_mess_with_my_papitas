@@ -17,7 +17,7 @@ impl Hud {
         Hud {
             player_life: 100.0,
             coins: 0,
-            seeds: 10,
+            seeds: 1,
         }
     }
 

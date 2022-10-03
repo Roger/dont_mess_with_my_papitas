@@ -21,12 +21,8 @@ impl Dirt {
         }
     }
 
-    #[method]
-    fn _ready(&mut self, #[base] _base: &Node2D) {}
-
     // #[method]
-    // fn _on_dirt_entered(&mut self, #[base] base: &Node2D, area: Ref<Area2D>) {
-    // }
+    // fn _ready(&mut self, #[base] _base: &Node2D) {}
 
     fn consume_seed(&self, base: &Node2D) -> bool {
         let hud = unsafe {

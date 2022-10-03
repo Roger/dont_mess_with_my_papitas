@@ -1,6 +1,7 @@
 mod game;
 mod hud;
 mod player;
+mod merchant;
 mod papita;
 mod slime;
 mod coin;
@@ -20,6 +21,7 @@ fn init(handle: InitHandle) {
     handle.add_class::<papita::Papita>();
     handle.add_class::<coin::Coin>();
     handle.add_class::<dirt::Dirt>();
+    handle.add_class::<merchant::Merchant>();
 }
 
 // macros that create the entry-points of the dynamic library.

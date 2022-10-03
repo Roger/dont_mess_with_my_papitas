@@ -172,7 +172,7 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 position = Vector2( 83, 93 )
 
-[node name="Mercader" parent="Playground" instance=ExtResource( 4 )]
+[node name="Merchant" parent="Playground" instance=ExtResource( 4 )]
 position = Vector2( 78, 38 )
 
 [node name="Sign" parent="Playground" instance=ExtResource( 1 )]
