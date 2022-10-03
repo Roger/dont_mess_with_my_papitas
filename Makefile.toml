@@ -1,0 +1,155 @@
+[config]
+# fix conflicts with build-release and core tasks
+skip_core_tasks = true
+default_to_workspace = false
+
+[tasks.test_pwd]
+script_runner = "@shell"
+script = '''
+pwd
+'''
+
+[tasks.build-debug]
+script_runner = "@shell"
+script = '''
+cargo make build-x86_64-unknown-linux-gnu-debug
+# cargo make build-i686-pc-windows-gnu-debug
+# cargo make build-x86_64-pc-windows-gnu-debug
+# cargo make build-i686-pc-windows-msvc-debug
+# cargo make build-x86_64-pc-windows-msvc-debug
+# cargo make build-wasm32-unknown-emscripten-debug
+'''
+
+[tasks.build-release]
+script_runner = "@shell"
+script = '''
+cargo make build-x86_64-unknown-linux-gnu-release
+cargo make export-wasm32-unknown-emscripten-release
+cargo make export-x86_64-pc-windows-gnu-release
+'''
+
+[tasks.export-debug]
+script_runner = "@shell"
+script = '''
+cargo make export-x86_64-unknown-linux-gnu-debug
+cargo make export-x86_64-pc-windows-gnu-debug
+cargo make export-wasm32-unknown-emscripten-debug
+'''
+
+[tasks.export-release]
+script_runner = "@shell"
+script = '''
+cargo make export-x86_64-unknown-linux-gnu-release
+cargo make export-x86_64-pc-windows-gnu-release
+cargo make export-wasm32-unknown-emscripten-release
+'''
+
+
+[tasks.build-x86_64-unknown-linux-gnu-debug]
+script_runner = "@shell"
+script = '''
+cargo build --target x86_64-unknown-linux-gnu 
+rm -f lib/x86_64-unknown-linux-gnu/*.so
+cp target/x86_64-unknown-linux-gnu/debug/*.so lib/x86_64-unknown-linux-gnu/
+'''
+
+[tasks.export-x86_64-unknown-linux-gnu-debug]
+dependencies = ["build-x86_64-unknown-linux-gnu-debug"]
+script_runner = "@shell"
+script = '''
+cd godot/
+godot --export-debug "Linux/X11.x86_64-unknown-linux-gnu.debug" bin/x86_64-unknown-linux-gnu/dmwmp.debug.x86_64-unknown-linux-gnu
+'''
+
+[tasks.build-x86_64-unknown-linux-gnu-release]
+script_runner = "@shell"
+script = '''
+cargo build --target x86_64-unknown-linux-gnu --release
+rm -f lib/x86_64-unknown-linux-gnu/*.so
+cp target/x86_64-unknown-linux-gnu/release/*.so lib/x86_64-unknown-linux-gnu
+'''
+
+[tasks.export-x86_64-unknown-linux-gnu-release]
+dependencies = ["build-x86_64-unknown-linux-gnu-release"]
+script_runner = "@shell"
+script = '''
+cd godot/
+godot --export "Linux/X11.x86_64-unknown-linux-gnu.release" bin/x86_64-unknown-linux-gnu/dmwmp.release.x86_64-unknown-linux-gnu
+'''
+
+[tasks.build-x86_64-pc-windows-gnu-debug]
+script_runner = "@shell"
+script = '''
+cargo build --target x86_64-pc-windows-gnu 
+if [[ -f lib/x86_64-pc-windows-gnu/*.dll ]]; then
+  rm lib/x86_64-pc-windows-gnu/*.dll
+fi
+cp target/x86_64-pc-windows-gnu/debug/*.dll lib/x86_64-pc-windows-gnu
+'''
+
+[tasks.export-x86_64-pc-windows-gnu-debug]
+dependencies = ["build-x86_64-pc-windows-gnu-debug"]
+script_runner = "@shell"
+script = '''
+cd godot/
+godot --export-debug "Windows Desktop.x86_64-pc-windows-gnu.debug" bin/x86_64-pc-windows-gnu/dmwmp.debug.x86_64-pc-windows-gnu.exe
+'''
+
+[tasks.build-x86_64-pc-windows-gnu-release]
+script_runner = "@shell"
+script = '''
+cargo build --target x86_64-pc-windows-gnu 
+if [[ -f lib/x86_64-pc-windows-gnu/*.dll ]]; then
+  rm lib/x86_64-pc-windows-gnu/*.dll
+fi
+cp target/x86_64-pc-windows-gnu/release/*.dll lib/x86_64-pc-windows-gnu
+'''
+
+[tasks.export-x86_64-pc-windows-gnu-release]
+dependencies = ["build-x86_64-pc-windows-gnu-release"]
+script_runner = "@shell"
+script = '''
+cd godot/
+godot --export "Windows Desktop.x86_64-pc-windows-gnu.release" bin/x86_64-pc-windows-gnu/dmwmp.release.x86_64-pc-windows-gnu.exe
+'''
+
+
+[tasks.build-wasm32-unknown-emscripten-debug]
+script_runner = "@shell"
+script = '''
+cargo build --target wasm32-unknown-emscripten 
+if [[ -f lib/wasm32-unknown-emscripten/*.wasm ]]; then
+  rm lib/wasm32-unknown-emscripten/*.wasm
+fi
+cp target/wasm32-unknown-emscripten/debug/*.wasm lib/wasm32-unknown-emscripten
+'''
+
+[tasks.export-wasm32-unknown-emscripten-debug]
+dependencies = ["build-wasm32-unknown-emscripten-debug"]
+script_runner = "@shell"
+script = '''
+cd godot/
+godot --export-debug "HTML5.wasm32-unknown-emscripten.debug" bin/wasm32-unknown-emscripten/dmwmp.debug.wasm32-unknown-emscripten.html
+'''
+
+[tasks.build-wasm32-unknown-emscripten-release]
+script_runner = "@shell"
+script = '''
+cargo build --target wasm32-unknown-emscripten --release
+if [[ -f lib/wasm32-unknown-emscripten/*.wasm ]]; then
+  rm lib/wasm32-unknown-emscripten/*.wasm
+fi
+cp target/wasm32-unknown-emscripten/release/*.wasm lib/wasm32-unknown-emscripten
+'''
+
+[tasks.export-wasm32-unknown-emscripten-release]
+dependencies = ["build-wasm32-unknown-emscripten-release"]
+script_runner = "@shell"
+script = '''
+cd godot/
+godot --export "HTML5.wasm32-unknown-emscripten.release" bin/wasm32-unknown-emscripten/dmwmp.release.wasm32-unknown-emscripten.html
+'''
+
+[tasks.clean]
+command = "cargo"
+args = ["clean"]

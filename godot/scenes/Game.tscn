@@ -1,0 +1,191 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://scenes/Fence.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/Background.png" type="Texture" id=3]
+[ext_resource path="res://scenes/Mercader.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/Dirt.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/Hearts.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/Pixel Sans Serif.ttf" type="DynamicFontData" id=7]
+[ext_resource path="res://assets/Tierrafalsaconpapitas.png" type="Texture" id=8]
+[ext_resource path="res://assets/Inventario.png" type="Texture" id=9]
+[ext_resource path="res://assets/Semillas.png" type="Texture" id=10]
+[ext_resource path="res://assets/Espada.png" type="Texture" id=11]
+[ext_resource path="res://native/Game.gdns" type="Script" id=13]
+[ext_resource path="res://native/Hud.gdns" type="Script" id=14]
+[ext_resource path="res://scenes/Coins.tscn" type="PackedScene" id=15]
+
+[sub_resource type="DynamicFont" id=2]
+size = 6
+font_data = ExtResource( 7 )
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 160, 89.25 )
+
+[node name="World" type="Node2D"]
+script = ExtResource( 13 )
+__meta__ = {
+"_edit_horizontal_guides_": [ 90.0 ],
+"_edit_vertical_guides_": [ 160.0 ]
+}
+
+[node name="Hud" type="Node" parent="."]
+script = ExtResource( 14 )
+
+[node name="Hearts" parent="Hud" instance=ExtResource( 6 )]
+
+[node name="Coins" parent="Hud" instance=ExtResource( 15 )]
+position = Vector2( 286, 12 )
+
+[node name="Inventory1" type="Sprite" parent="Hud"]
+position = Vector2( 307, 78 )
+texture = ExtResource( 9 )
+
+[node name="Seeds" type="Sprite" parent="Hud/Inventory1"]
+texture = ExtResource( 10 )
+
+[node name="SeedsCount" type="Label" parent="Hud/Inventory1"]
+margin_left = -6.0
+margin_top = -1.0
+margin_right = 7.0
+margin_bottom = 9.0
+custom_fonts/font = SubResource( 2 )
+text = "10"
+
+[node name="Inventory2" type="Sprite" parent="Hud"]
+position = Vector2( 307, 102 )
+texture = ExtResource( 9 )
+
+[node name="Sword" type="Sprite" parent="Hud/Inventory2"]
+position = Vector2( 1, 0 )
+texture = ExtResource( 11 )
+
+[node name="Timer" type="Timer" parent="."]
+unique_name_in_owner = true
+
+[node name="SpawnPoints" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="Position2D" type="Position2D" parent="SpawnPoints"]
+position = Vector2( -19, 36 )
+
+[node name="Position2D2" type="Position2D" parent="SpawnPoints"]
+position = Vector2( -19, 137 )
+
+[node name="Position2D3" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 28, 194 )
+
+[node name="Position2D4" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 164, 195 )
+
+[node name="Position2D5" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 287, 196 )
+
+[node name="Position2D6" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 349, 174 )
+
+[node name="Position2D7" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 354, 98 )
+
+[node name="Position2D8" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 354, 39 )
+
+[node name="Position2D9" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 302, -11 )
+
+[node name="Position2D10" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 22, -9 )
+
+[node name="Limits" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Limits"]
+polygon = PoolVector2Array( -1, -1, -1, 182, 321, 181, 321, -1, 370, -2, 370, 205, -29, 210, -32, -1 )
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Limits"]
+polygon = PoolVector2Array( 61, 0, 73, 12, 83, 23, 94, 23, 113, 19, 121, 17, 133, 17, 134, 22, 153, 26, 168, 23, 186, 10, 187, 0, 321, -1, 321, -20, -1, -19, -1, -1 )
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 159, 90 )
+texture = ExtResource( 3 )
+
+[node name="Tierrafalsaconpapitas" type="Sprite" parent="."]
+visible = false
+position = Vector2( 160, 89 )
+texture = ExtResource( 8 )
+
+[node name="Dirts" type="Node2D" parent="."]
+
+[node name="Dirt" parent="Dirts" instance=ExtResource( 5 )]
+position = Vector2( 134, 63 )
+
+[node name="Dirt2" parent="Dirts" instance=ExtResource( 5 )]
+position = Vector2( 152, 63 )
+
+[node name="Dirt3" parent="Dirts" instance=ExtResource( 5 )]
+position = Vector2( 170, 63 )
+
+[node name="Dirt4" parent="Dirts" instance=ExtResource( 5 )]
+position = Vector2( 188, 63 )
+
+[node name="Dirt5" parent="Dirts" instance=ExtResource( 5 )]
+position = Vector2( 134, 80 )
+
+[node name="Dirt6" parent="Dirts" instance=ExtResource( 5 )]
+position = Vector2( 152, 80 )
+
+[node name="Dirt7" parent="Dirts" instance=ExtResource( 5 )]
+position = Vector2( 170, 80 )
+
+[node name="Dirt8" parent="Dirts" instance=ExtResource( 5 )]
+position = Vector2( 188, 80 )
+
+[node name="Dirt9" parent="Dirts" instance=ExtResource( 5 )]
+position = Vector2( 134, 97 )
+
+[node name="Dirt10" parent="Dirts" instance=ExtResource( 5 )]
+position = Vector2( 152, 97 )
+
+[node name="Dirt11" parent="Dirts" instance=ExtResource( 5 )]
+position = Vector2( 170, 97 )
+
+[node name="Dirt12" parent="Dirts" instance=ExtResource( 5 )]
+position = Vector2( 188, 97 )
+
+[node name="Dirt13" parent="Dirts" instance=ExtResource( 5 )]
+position = Vector2( 134, 114 )
+
+[node name="Dirt14" parent="Dirts" instance=ExtResource( 5 )]
+position = Vector2( 152, 114 )
+
+[node name="Dirt15" parent="Dirts" instance=ExtResource( 5 )]
+position = Vector2( 170, 114 )
+
+[node name="Dirt16" parent="Dirts" instance=ExtResource( 5 )]
+position = Vector2( 188, 114 )
+
+[node name="Papitas" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Playground" type="YSort" parent="."]
+
+[node name="Player" parent="Playground" instance=ExtResource( 2 )]
+unique_name_in_owner = true
+position = Vector2( 83, 93 )
+
+[node name="Mercader" parent="Playground" instance=ExtResource( 4 )]
+position = Vector2( 78, 38 )
+
+[node name="Sign" parent="Playground" instance=ExtResource( 1 )]
+position = Vector2( 253, 58 )
+
+[node name="Slimes" type="YSort" parent="Playground"]
+unique_name_in_owner = true
+
+[node name="GameArea" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameArea"]
+position = Vector2( 160, 90.75 )
+shape = SubResource( 1 )
+
+[connection signal="timeout" from="Timer" to="." method="_on_timeout"]
