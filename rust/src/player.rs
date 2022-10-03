@@ -132,10 +132,6 @@ impl Player {
             }
             return;
         }
-        if self.life <= 0.0 {
-            base.queue_free();
-        }
-
         // Update life in hud
         let hud = unsafe { base.get_node_as_instance::<hud::Hud>("/root//World/Hud").unwrap() };
         hud.map_mut(|x, o| {
@@ -144,6 +140,11 @@ impl Player {
         .ok()
         .unwrap_or_else(|| godot_print!("Unable to get hud"));
 
-        println!("life: {}", self.life);
+        if self.life <= 0.0 {
+            unsafe { base.get_tree().unwrap().assume_safe() }
+                .change_scene("res://scenes/Title.tscn")
+                .unwrap();
+            base.queue_free();
+        }
     }
 }

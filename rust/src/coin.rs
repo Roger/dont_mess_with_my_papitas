@@ -1,16 +1,21 @@
 use gdnative::api::*;
 use gdnative::prelude::*;
+use instant::Instant;
 use crate::node_ext::NodeExt;
 use crate::hud;
 
 #[derive(NativeClass)]
 #[inherit(Node2D)]
-pub struct Coin;
+pub struct Coin {
+    started_at: Instant,
+}
 
 #[methods]
 impl Coin {
     fn new(_base: &Node2D) -> Self {
-        Coin
+        Coin {
+            started_at: Instant::now(),
+        }
     }
 
     #[method]
@@ -22,6 +27,9 @@ impl Coin {
 
     #[method]
     fn _on_coin_entered(&mut self, #[base] base: &Node2D, area: Ref<Area2D>) {
+        if self.started_at.elapsed().as_millis() < 10 {
+            return;
+        }
         let area = unsafe { area.assume_safe() };
         if area.name().to_string() == "PlayerHurtbox" {
 

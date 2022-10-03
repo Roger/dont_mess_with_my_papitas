@@ -136,7 +136,7 @@ impl Slime {
 
     fn is_dead(&self) -> bool {
         if let Some(timer) = self.dying {
-            return timer.elapsed().as_secs_f32() > 5.0;
+            return timer.elapsed().as_secs_f32() > 2.0;
         }
         false
     }

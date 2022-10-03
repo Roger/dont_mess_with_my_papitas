@@ -15,7 +15,7 @@ impl Game {
     fn new(_base: &Node2D) -> Self {
         Game {
             spawn_points: Vec::default(),
-            wave: 1,
+            wave: 2,
         }
     }
 
