@@ -18,8 +18,8 @@ cargo make build-x86_64-unknown-linux-gnu-debug
 script_runner = "@shell"
 script = '''
 cargo make build-x86_64-unknown-linux-gnu-release
-cargo make export-wasm32-unknown-emscripten-release
-cargo make export-x86_64-pc-windows-gnu-release
+cargo make build-wasm32-unknown-emscripten-release
+cargo make build-x86_64-pc-windows-gnu-release
 '''
 
 [tasks.export-debug]
@@ -58,7 +58,7 @@ godot --export-debug "Linux/X11.x86_64-unknown-linux-gnu.debug" bin/x86_64-unkno
 [tasks.build-x86_64-unknown-linux-gnu-release]
 script_runner = "@shell"
 script = '''
-cargo build --target x86_64-unknown-linux-gnu --release
+cross build --target x86_64-unknown-linux-gnu --release
 rm -f lib/x86_64-unknown-linux-gnu/*.so
 cp target/x86_64-unknown-linux-gnu/release/*.so lib/x86_64-unknown-linux-gnu
 '''
