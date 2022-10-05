@@ -3,12 +3,6 @@
 skip_core_tasks = true
 default_to_workspace = false
 
-[tasks.test_pwd]
-script_runner = "@shell"
-script = '''
-pwd
-'''
-
 [tasks.build-debug]
 script_runner = "@shell"
 script = '''
