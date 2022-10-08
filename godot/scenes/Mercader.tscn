@@ -41,9 +41,8 @@ position = Vector2( 26, -9 )
 shape = SubResource( 2 )
 
 [node name="Inventory" type="Sprite" parent="."]
-visible = false
-position = Vector2( -13.6329, -17.6216 )
-scale = Vector2( 0.402863, 0.406186 )
+position = Vector2( -15.5, -19.5041 )
+scale = Vector2( 0.565218, 0.569881 )
 texture = ExtResource( 3 )
 
 [node name="Seeds" type="Sprite" parent="Inventory"]

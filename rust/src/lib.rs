@@ -1,3 +1,4 @@
+mod utils;
 mod data;
 mod title;
 mod game;

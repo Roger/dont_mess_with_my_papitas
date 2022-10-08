@@ -13,9 +13,9 @@ use crate::node_ext::NodeExt;
 // #[register_with(Self::register_builder)]
 pub struct Slime {
     dying: Option<Instant>,
+    last_flip: Option<Instant>,
     velocity: Vector2,
     target: Option<i64>,
-    follow_player: bool,
     life: usize,
 }
 
@@ -26,14 +26,10 @@ impl Slime {
             dying: None,
             velocity: Vector2::ZERO,
             target: None,
-            follow_player: false,
             life: 10,
+            last_flip: None,
         }
     }
-
-    // #[method]
-    // fn _ready(&mut self, #[base] _base: &KinematicBody2D) {
-    // }
 
     fn get_random_target_id(&self, base: &KinematicBody2D) -> Option<i64> {
         let papitas = self.expect_node::<Node2D, _>(base, "%Papitas");
@@ -71,8 +67,15 @@ impl Slime {
         let papitas = self.expect_node::<Node2D, _>(base, "%Papitas");
         let child_count = papitas.get_child_count();
 
+        if let Some(player) = self.try_get_node::<KinematicBody2D, _>(base, "%Player") {
+            let player_global_pos = player.global_position();
+            if player_global_pos.distance_to(base.global_position()) < 50.0 {
+                return player_global_pos;
+            }
+        }
+
         // if the player is close or there is no more papitas
-        if self.follow_player || child_count == 0 {
+        if child_count == 0 {
             if let Some(player) = self.try_get_node::<KinematicBody2D, _>(base, "%Player") {
                 return player.global_position();
             }
@@ -99,39 +102,15 @@ impl Slime {
     #[method]
     fn _on_hurtbox_area_entered(&mut self, #[base] base: &KinematicBody2D, area: Ref<Area2D>) {
         let area = unsafe { area.assume_safe() };
-        // when the slime enters the game area, reenable the collision
-        if area.name().to_string() == "GameArea" {
-            // let collision = base.expect_node::<CollisionShape2D, _>("CollisionShape2D");
-            // collision.set_disabled(false);
-            return;
-        } else if area.name().to_string() != "Hitbox" {
+        if self.dying.is_some() || area.name().to_string() != "Hitbox" {
             return;
         }
-        let animated_sprite = base.expect_node::<AnimatedSprite, _>("AnimatedSprite");
-        animated_sprite.set_animation("dying");
-        let collision = base.expect_node::<CollisionShape2D, _>("CollisionShape2D");
-        collision.set_disabled(true);
 
-        let collision_hitbox = base.expect_node::<CollisionShape2D, _>("HitboxEnemy/Collision");
-        collision_hitbox.set_disabled(true);
+        let animation_player = base.expect_node::<AnimationPlayer, _>("AnimationPlayer");
+        animation_player.set_current_animation("Dying");
+
         self.dying = Some(Instant::now());
         self.drop_item(base);
-    }
-
-    #[method]
-    fn _on_vision_entered(&mut self, area: Ref<Area2D>) {
-        let area = unsafe { area.assume_safe() };
-        if area.name().to_string() == "PlayerHurtbox" {
-            self.follow_player = true;
-        }
-    }
-
-    #[method]
-    fn _on_vision_exited(&mut self, area: Ref<Area2D>) {
-        let area = unsafe { area.assume_safe() };
-        if area.name().to_string() == "PlayerHurtbox" {
-            self.follow_player = false;
-        }
     }
 
     fn is_dead(&self) -> bool {
@@ -156,18 +135,38 @@ impl Slime {
     }
 
     #[method]
-    fn _physics_process(&mut self, #[base] base: &KinematicBody2D, delta: f64) {
+    fn _physics_process(&mut self, #[base] base: &KinematicBody2D, _delta: f64) {
         if self.is_dead() {
             base.queue_free();
         } else if self.dying.is_none() {
             let target_vector = self.get_target_vector(base);
-            let direction = base.global_position().direction_to(target_vector);
+            let global_pos = base.global_position();
+
+            let animation_player = base.expect_node::<AnimationPlayer, _>("AnimationPlayer");
+            let collision = base.expect_node::<CollisionShape2D, _>("HitboxEnemy/Collision");
+            if global_pos.distance_to(target_vector) < 10.0 {
+                animation_player.set_current_animation("Attack");
+                collision.set_disabled(false);
+                return;
+            } else {
+                collision.set_disabled(true);
+                animation_player.set_current_animation("Walk");
+            }
+            let direction = global_pos.direction_to(target_vector);
             self.velocity = self
                 .velocity
-                .move_toward(direction * 50.0, 100.0 * delta as f32);
+                .move_toward(direction * 50.0, 100.0 as f32);
             self.velocity =
                 base.move_and_slide(self.velocity, Vector2::ZERO, false, 4, FRAC_PI_4, true);
-            base.expect_node::<AnimatedSprite, _>("AnimatedSprite")
+
+            // Only turn vision to target max once every 150 milliseconds
+            if let Some(last_flip) = self.last_flip {
+                if last_flip.elapsed().as_millis() < 150 {
+                    return;
+                }
+            }
+            self.last_flip = Some(Instant::now());
+            base.expect_node::<Sprite, _>("Sprite")
                 .set_flip_h(self.velocity.x < 0.0);
         }
     }

@@ -6,8 +6,8 @@
 [ext_resource path="res://scenes/Hurtbox.tscn" type="PackedScene" id=4]
 
 [sub_resource type="CapsuleShape2D" id=1]
-radius = 4.00001
-height = 9.99994
+radius = 4.00002
+height = 5.99998
 
 [sub_resource type="Animation" id=29]
 resource_name = "AttackDown"
@@ -291,7 +291,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.3 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 0 ), Vector2( 0, 0.8 ) ]
+"values": [ Vector2( 0, 0 ), Vector2( 0, 0.69 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("Sprite:scale")
@@ -344,7 +344,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.3 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 0 ), Vector2( 0, 0.8 ) ]
+"values": [ Vector2( 0, 0 ), Vector2( 0, 0.69 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("Sprite:scale")
@@ -397,7 +397,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.3 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 0 ), Vector2( 0, 0.8 ) ]
+"values": [ Vector2( 0, 0 ), Vector2( 0, 0.69 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("Sprite:scale")
@@ -450,7 +450,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.3 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 0 ), Vector2( 0, 0.8 ) ]
+"values": [ Vector2( 0, 0 ), Vector2( 0, 0.69 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("Sprite:scale")
@@ -716,13 +716,15 @@ animation = "WalkRight"
 
 [sub_resource type="AnimationNodeBlendSpace2D" id=18]
 blend_point_0/node = SubResource( 21 )
-blend_point_0/pos = Vector2( 0, -1 )
+blend_point_0/pos = Vector2( 0, -1.1 )
 blend_point_1/node = SubResource( 22 )
-blend_point_1/pos = Vector2( 0, 1 )
+blend_point_1/pos = Vector2( 0, 1.1 )
 blend_point_2/node = SubResource( 24 )
 blend_point_2/pos = Vector2( -1, 0 )
 blend_point_3/node = SubResource( 25 )
 blend_point_3/pos = Vector2( 1, 0 )
+min_space = Vector2( -1, -1.1 )
+max_space = Vector2( 1, 1.1 )
 blend_mode = 1
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=19]
@@ -757,12 +759,12 @@ script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 0, -12 )
-scale = Vector2( 1, 0.968266 )
+scale = Vector2( 1, 0.976405 )
 texture = ExtResource( 1 )
-offset = Vector2( 0, 0.507746 )
+offset = Vector2( 0, 0.325616 )
 hframes = 6
 vframes = 9
-frame = 33
+frame = 12
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -2 )
@@ -790,7 +792,7 @@ anim_player = NodePath("../AnimationPlayer")
 parameters/playback = SubResource( 6 )
 parameters/Attack/blend_position = Vector2( -0.00317967, -0.780347 )
 parameters/Idle/blend_position = Vector2( -0.00317967, 0.791908 )
-parameters/Walk/blend_position = Vector2( 0.478537, 0.198276 )
+parameters/Walk/blend_position = Vector2( 0.00158978, 0.0699422 )
 
 [node name="PivotHB" type="Position2D" parent="."]
 position = Vector2( 0, -8 )

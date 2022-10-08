@@ -1,17 +1,17 @@
 use std::f64::consts::FRAC_PI_4;
 
 // use crate::globalscope::*;
-// use crate::node_ext::NodeExt;
+use crate::input_const::*;
+use crate::node_ext::NodeExt;
 use gdnative::api::*;
 use gdnative::prelude::*;
 use instant::Instant;
-use crate::input_const::*;
 
 use crate::hud;
 
 // const FRICTION: f32 = 2000.0;
 const ACCELERATION: f32 = 800.0;
-const MAX_VELOCITY: f32 = 150.0;
+const MAX_VELOCITY: f32 = 120.0;
 
 pub enum PlayerState {
     Move,
@@ -58,8 +58,8 @@ impl Player {
     #[method]
     fn _physics_process(&mut self, #[base] base: &KinematicBody2D, delta: f64) {
         match self.state {
-            PlayerState::Move => self.move_state(base, delta),
-            PlayerState::Attack => self.attack_state(base, delta),
+            PlayerState::Move => self.move_state(base),
+            PlayerState::Attack => self.attack_state(base),
         }
     }
 
@@ -68,7 +68,7 @@ impl Player {
         self.state = PlayerState::Move;
     }
 
-    fn attack_state(&mut self, base: &KinematicBody2D, _delta: f64) {
+    fn attack_state(&mut self, base: &KinematicBody2D) {
         self.velocity = Vector2::ZERO;
 
         let animation_tree = unsafe { base.get_node_as::<AnimationTree>("AnimationTree").unwrap() };
@@ -77,10 +77,29 @@ impl Player {
             .try_to_object::<AnimationNodeStateMachinePlayback>()
             .unwrap();
         let playback = unsafe { playback.assume_safe() };
+
+        // let input = Input::godot_singleton();
+        // let mut input_vector = Vector2::ZERO;
+        // input_vector.x = (input.get_action_strength(INPUT_RIGHT, false)
+        //     - input.get_action_strength(INPUT_LEFT, false)) as f32;
+        // input_vector.y = (input.get_action_strength(INPUT_DOWN, false)
+        //     - input.get_action_strength(INPUT_UP, false)) as f32;
+        // input_vector = input_vector.normalized();
+        // if input_vector != Vector2::ZERO {
+        //     animation_tree.set("parameters/Idle/blend_position", input_vector);
+        //     animation_tree.set("parameters/Walk/blend_position", input_vector);
+        //     animation_tree.set("parameters/Attack/blend_position", input_vector);
+        //     // if !input.is_action_pressed(INPUT_ATTACK, false) {
+        //     //     playback.travel("Idle");
+        //         // self.state = PlayerState::Move;
+        //         // return;
+        //     // }
+        // }
+
         playback.travel("Attack");
     }
 
-    fn move_state(&mut self, base: &KinematicBody2D, delta: f64) {
+    fn move_state(&mut self, base: &KinematicBody2D) {
         let input = Input::godot_singleton();
         let mut input_vector = Vector2::ZERO;
         input_vector.x = (input.get_action_strength(INPUT_RIGHT, false)
@@ -99,7 +118,7 @@ impl Player {
             input_vector = input_vector.normalized();
             self.velocity = self
                 .velocity
-                .move_toward(input_vector * MAX_VELOCITY, ACCELERATION * delta as f32);
+                .move_toward(input_vector * MAX_VELOCITY, ACCELERATION as f32);
 
             animation_tree.set("parameters/Idle/blend_position", input_vector);
             animation_tree.set("parameters/Walk/blend_position", input_vector);
@@ -119,21 +138,44 @@ impl Player {
     }
 
     #[method]
+    fn _process(&mut self, #[base] base: &KinematicBody2D, _delay: f64) {
+        self.handle_hit_cooldown(base);
+    }
+
+    fn handle_hit_cooldown(&mut self, base: &KinematicBody2D) {
+        let sprite = base.expect_node::<Sprite, _>("Sprite");
+        match self.last_hit {
+            // if last hit expired
+            Some(last_hit) if last_hit.elapsed().as_secs() >= 1 => {
+                self.last_hit = None;
+            }
+            _ => (),
+        };
+        if self.last_hit.is_none() {
+            sprite.set_modulate(Color::from_rgba(1.0, 1.0, 1.0, 1.0));
+        } else {
+            sprite.set_modulate(Color::from_rgba(1.0, 1.0, 1.0, 0.5));
+        }
+    }
+
+    #[method]
     fn _on_hurtbox_entered(&mut self, #[base] base: &KinematicBody2D, area: Ref<Area2D>) {
         let area = unsafe { area.assume_safe() };
         if area.name().to_string() != "HitboxEnemy" {
             return;
         }
-        self.life -= 10.0;
 
-        if let Some(last_hit) = self.last_hit {
-            if last_hit.elapsed().as_secs() >= 1 {
-                self.last_hit = None;
-            }
+        if self.last_hit.is_some() {
             return;
         }
+        self.last_hit = Some(Instant::now());
+        self.life -= 10.0;
+
         // Update life in hud
-        let hud = unsafe { base.get_node_as_instance::<hud::Hud>("/root//World/Hud").unwrap() };
+        let hud = unsafe {
+            base.get_node_as_instance::<hud::Hud>("/root//World/Hud")
+                .unwrap()
+        };
         hud.map_mut(|x, o| {
             x.update_life(&o, -10.0);
         })
