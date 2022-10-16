@@ -154,7 +154,7 @@ impl Player {
         if self.last_hit.is_none() {
             sprite.set_modulate(Color::from_rgba(1.0, 1.0, 1.0, 1.0));
         } else {
-            sprite.set_modulate(Color::from_rgba(1.0, 1.0, 1.0, 0.5));
+            sprite.set_modulate(Color::from_rgba(1.0, 0.7, 0.7, 1.0));
         }
     }
 
