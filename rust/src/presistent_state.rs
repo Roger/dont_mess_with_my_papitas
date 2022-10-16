@@ -1,18 +1,16 @@
 use gdnative::api::*;
 use gdnative::prelude::*;
-// use crate::node_ext::NodeExt;
-// use crate::hud;
 
 #[derive(NativeClass)]
 #[inherit(Node2D)]
-pub struct Data {
+pub struct PersistentState {
     pub score: i32,
 }
 
 #[methods]
-impl Data {
+impl PersistentState {
     fn new(_base: &Node2D) -> Self {
-        Data {
+        PersistentState {
             score: 0,
         }
     }
@@ -20,7 +18,6 @@ impl Data {
     #[method]
     pub fn update_score(&mut self, #[base] _base: &Node2D, score: i32) {
         if score > self.score {
-            dbg!(self.score);
             self.score = score;
         }
     }

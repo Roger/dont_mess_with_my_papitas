@@ -1,7 +1,7 @@
 use gdnative::api::*;
 use gdnative::prelude::*;
 
-use crate::data::Data;
+use crate::presistent_state::PersistentState;
 use crate::node_ext::NodeExt;
 
 #[derive(NativeClass)]
@@ -61,16 +61,15 @@ impl Hud {
         let score = base.expect_node::<Label, _>("Score/Amount");
         score.set_text(self.score.to_string());
 
-        let data = unsafe {
-            base.get_node_as_instance::<Data>("/root/Data")
+        let persistence = unsafe {
+            base.get_node_as_instance::<PersistentState>("/root/PersistentState")
                 .unwrap()
         };
-        data.map_mut(|x, o| {
+        persistence.map_mut(|x, o| {
             x.update_score(&o, self.score);
         })
         .ok()
         .unwrap_or_else(|| godot_print!("Unable to get data"));
-
     }
 
 }

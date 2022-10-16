@@ -1,6 +1,6 @@
 // use crate::input_const::*;
 use crate::node_ext::NodeExt;
-use crate::data::Data;
+use crate::presistent_state::PersistentState;
 use gdnative::api::*;
 use gdnative::prelude::*;
 // use instant::Instant;
@@ -21,12 +21,12 @@ impl Title {
 
     #[method]
     fn _ready(&mut self, #[base] base: &Control) {
-        let data = unsafe {
-            base.get_node_as_instance::<Data>("/root/Data")
+        let persistence = unsafe {
+            base.get_node_as_instance::<PersistentState>("/root/PersistentState")
                 .unwrap()
         };
         let mut score = 0;
-        data.map_mut(|x, _o| {
+        persistence.map_mut(|x, _o| {
             score = x.score;
         })
         .ok()
