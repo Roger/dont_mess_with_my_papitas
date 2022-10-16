@@ -48,11 +48,24 @@ impl Coin {
 
     #[method]
     fn _process(&mut self, #[base] base: &Node2D, delta: f64) {
+        let sprite = base.expect_node::<Sprite, _>("Coin");
         match self.state {
-            State::FLOOR => (),
+            State::FLOOR => {
+                match self.started_at.elapsed().as_millis() {
+                    // On 10 seconds remove the coin
+                    10000.. => base.queue_free(),
+                    // Oscillate transparency in the last 2 seconds
+                    millis @ 8000..=9999 => {
+                        let alpha = (millis as f32 % 150.0) / 250.0 + 0.3;
+                        sprite.set_modulate(Color::from_rgba(1.0, 1.0, 1.0, alpha));
+                    }
+                    _ => (),
+                }
+            },
             // Reparent to hud on collect, to make the coin
             // on top of everything while flying
             State::COLLECTED => {
+                sprite.set_modulate(Color::from_rgba(1.0, 1.0, 1.0, 1.0));
                 reparent_to_hud(base);
                 self.state = State::FLYING;
             }
