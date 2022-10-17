@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://assets/papitas/TierraUp.png" type="Texture" id=1]
 [ext_resource path="res://assets/papitas/TierraDown.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://native/Papita.gdns" type="Script" id=4]
 [ext_resource path="res://scenes/Hurtbox.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/SmollCorazon.png" type="Texture" id=6]
+[ext_resource path="res://assets/papitas/TierraFull.png" type="Texture" id=7]
 
 [sub_resource type="Animation" id=1]
 resource_name = "PapitaUpDown"
@@ -30,6 +31,17 @@ radius = 5.0
 [node name="Papita" type="Node2D"]
 script = ExtResource( 4 )
 
+[node name="GrassFull" type="Sprite" parent="."]
+texture = ExtResource( 7 )
+
+[node name="ReferenceRect" type="ReferenceRect" parent="."]
+margin_left = -6.0
+margin_top = -6.0
+margin_right = 6.0
+margin_bottom = 6.0
+border_color = Color( 0.552941, 0.0352941, 0.0352941, 1 )
+border_width = 1.1
+
 [node name="GrassUp" type="Sprite" parent="."]
 texture = ExtResource( 1 )
 
@@ -53,12 +65,6 @@ anims/PapitaUpDown = SubResource( 1 )
 [node name="Collision" parent="Hurtbox" index="0"]
 shape = SubResource( 2 )
 
-[node name="ReferenceRect" type="ReferenceRect" parent="."]
-margin_left = -8.0
-margin_top = -8.0
-margin_right = 8.0
-margin_bottom = 8.0
-border_color = Color( 0.552941, 0.0352941, 0.0352941, 1 )
 
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_entered"]
 
