@@ -24,6 +24,7 @@ impl Game {
 
     #[method]
     fn _ready(&mut self, #[base] base: &Node2D) {
+        // Reset global state on new game
         let state = get_global_state_instance(base);
         state.map_mut(|s, o| s.reset(&o)).unwrap();
 
@@ -89,9 +90,4 @@ impl Game {
         instance.set_global_position(spawn_point.clone());
         slimes.add_child(instance, false);
     }
-
-    // This function will be called in every frame
-    // #[method]
-    // fn _process(&mut self, #[base] _base: &Node2D, delta: f64) {
-    // }
 }
