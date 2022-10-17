@@ -1,7 +1,7 @@
+use crate::global_state;
 use crate::globalscope::lerp;
-use crate::hud;
 use crate::node_ext::NodeExt;
-use crate::utils::get_hud_instance;
+use crate::utils::get_global_state_instance;
 use crate::utils::reparent_to_hud;
 use gdnative::api::*;
 use gdnative::prelude::*;
@@ -61,7 +61,7 @@ impl Coin {
                     }
                     _ => (),
                 }
-            },
+            }
             // Reparent to hud on collect, to make the coin
             // on top of everything while flying
             State::COLLECTED => {
@@ -75,11 +75,12 @@ impl Coin {
                     .global_position();
                 let mut global_pos = base.global_position();
                 if global_pos.distance_to(target_pos) < 3.0 {
-                    let hud = get_hud_instance(base);
-                    hud.map_mut(|x, o| {
-                        x.update_coins(&o, 1);
-                    })
-                    .unwrap();
+                    let state = get_global_state_instance(base);
+                    state
+                        .map_mut(|x, o| {
+                            x.update_coins(&o, 1);
+                        })
+                        .unwrap();
                     base.queue_free();
                 }
 

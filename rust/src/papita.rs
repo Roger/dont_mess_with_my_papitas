@@ -1,24 +1,25 @@
-use crate::presistent_state::{PersistentState};
 use crate::input_const::*;
 use crate::node_ext::NodeExt;
-use crate::utils::get_hud_instance;
-use crate::utils::reparent_to_hud;
+// use crate::presistent_state::PersistentState;
+use crate::utils::{get_global_state_instance};
+// use crate::utils::reparent_to_hud;
 use gdnative::api::*;
 use gdnative::prelude::*;
 use instant::Instant;
 
-#[derive(Debug)]
-enum State {
-    FLOOR,
-    FLYING,
-}
+// #[derive(Debug)]
+// enum State {
+//     FLOOR,
+//     FLYING,
+// }
 
 #[derive(NativeClass)]
 #[inherit(Node2D)]
 pub struct Papita {
     life: isize,
     last_hit: Option<Instant>,
-    state: State,
+    // state: State,
+    // buff: Option<Buff>,
 }
 
 #[methods]
@@ -27,7 +28,7 @@ impl Papita {
         Papita {
             life: 3,
             last_hit: None,
-            state: State::FLOOR,
+            // buff: None,
         }
     }
 
@@ -71,14 +72,25 @@ impl Papita {
         instance.set_global_position(base.global_position());
         dirts.add_child(instance, false);
 
-        let hud = get_hud_instance(base);
+        let hud = get_global_state_instance(base);
         hud.map_mut(|x, o| {
             x.update_score(&o, 1);
-        }).unwrap();
+        })
+        .unwrap();
     }
+
+    // fn try_get_buff(&self, base: &Node2D) -> Option<Buff> {
+    //     let data = unsafe { base.get_node_as_instance::<PersistentState>("/root/Data").unwrap() };
+    //     let buff = data.map_mut(|x, _o| x.get_buff()).ok().unwrap();
+    //     buff
+    // }
 
     #[method]
     fn _process(&mut self, #[base] base: &Node2D, _delta: f64) {
+        // if self.buff.is_none() {
+        //     self.buff = self.try_get_buff(base);
+        // }
+
         let reference_rect = base.expect_node::<ReferenceRect, _>("ReferenceRect");
         let player = base.expect_node::<Node2D, _>("/root/World/Playground/Player");
         let player_pos = player.global_position();
@@ -100,7 +112,6 @@ impl Papita {
             if input.is_action_pressed(INPUT_SECOND_ACTION, false) {
                 // let papita = base.expect_node::<Sprite, _>("Papita");
                 self.unplant_potato(base);
-                // reparent_to_hud(papita.as_ref());
                 base.queue_free();
             }
         } else {

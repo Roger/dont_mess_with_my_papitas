@@ -1,23 +1,19 @@
 use gdnative::api::*;
 use gdnative::prelude::*;
 
-use crate::hud;
 use crate::input_const::*;
 use crate::node_ext::NodeExt;
+use crate::utils::get_global_state_instance;
 
 #[derive(NativeClass)]
 #[inherit(StaticBody2D)]
-pub struct Merchant {}
+pub struct Merchant;
 
 #[methods]
 impl Merchant {
     fn new(_base: &StaticBody2D) -> Self {
-        Merchant {}
+        Merchant
     }
-
-    // #[method]
-    // fn _ready(&mut self, #[base] base: &StaticBody2D) {
-    // }
 
     #[method]
     fn _on_sell_area_entered(&mut self, #[base] base: &StaticBody2D, area: Ref<Area2D>) {
@@ -67,20 +63,15 @@ impl Merchant {
     }
 
     fn buy(&self, base: &StaticBody2D) {
-        let hud = unsafe {
-            base.get_node_as_instance::<hud::Hud>("/root//World/Hud")
-                .unwrap()
-        };
+        let state = get_global_state_instance(base);
         // let mut removed_seed = false;
-        hud.map_mut(|x, o| {
+        state.map_mut(|x, o| {
             if x.coins >= 5 {
                 x.update_seeds(&o, 1);
                 x.update_coins(&o, -5);
                 // removed_seed = true;
             }
-        })
-        .ok()
-        .unwrap_or_else(|| godot_print!("Unable to get hud"));
+        }).unwrap();
         // removed_seed
     }
 }

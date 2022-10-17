@@ -28,9 +28,7 @@ impl Title {
         let mut score = 0;
         persistence.map_mut(|x, _o| {
             score = x.score;
-        })
-        .ok()
-        .unwrap_or_else(|| godot_print!("Unable to get data"));
+        }).unwrap();
         let score_label = base.expect_node::<Label, _>("Score");
         score_label.set_text(&format!("Best Score: {score}"));
     }

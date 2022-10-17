@@ -1,4 +1,4 @@
-use crate::hud;
+use crate::global_state;
 use crate::input_const::*;
 use crate::node_ext::NodeExt;
 use gdnative::api::*;
@@ -21,23 +21,20 @@ impl Dirt {
         }
     }
 
-    // #[method]
-    // fn _ready(&mut self, #[base] _base: &Node2D) {}
-
     fn consume_seed(&self, base: &Node2D) -> bool {
-        let hud = unsafe {
-            base.get_node_as_instance::<hud::Hud>("/root//World/Hud")
+        let state = unsafe {
+            base.get_node_as_instance::<global_state::GlobalState>("/root/GlobalState")
                 .unwrap()
         };
         let mut removed_seed = false;
-        hud.map_mut(|x, o| {
-            if x.seeds > 0 {
-                x.update_seeds(&o, -1);
-                removed_seed = true;
-            }
-        })
-        .ok()
-        .unwrap_or_else(|| godot_print!("Unable to get hud"));
+        state
+            .map_mut(|x, o| {
+                if x.seeds > 0 {
+                    x.update_seeds(&o, -1);
+                    removed_seed = true;
+                }
+            })
+            .unwrap();
         removed_seed
     }
 

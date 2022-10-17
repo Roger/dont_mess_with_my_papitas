@@ -1,5 +1,7 @@
 mod utils;
 mod presistent_state;
+mod joystick;
+mod global_state;
 mod title;
 mod game;
 mod hud;
@@ -18,6 +20,7 @@ use gdnative::prelude::{godot_init, InitHandle, Variant};
 // Function that registers all exposed classes to Godot
 fn init(handle: InitHandle) {
     handle.add_class::<presistent_state::PersistentState>();
+    handle.add_class::<global_state::GlobalState>();
     handle.add_class::<title::Title>();
     handle.add_class::<game::Game>();
     handle.add_class::<hud::Hud>();

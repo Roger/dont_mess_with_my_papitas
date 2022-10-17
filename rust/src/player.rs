@@ -1,15 +1,12 @@
 use std::f64::consts::FRAC_PI_4;
 
-// use crate::globalscope::*;
 use crate::input_const::*;
 use crate::node_ext::NodeExt;
+use crate::utils::get_global_state_instance;
 use gdnative::api::*;
 use gdnative::prelude::*;
 use instant::Instant;
 
-use crate::hud;
-
-// const FRICTION: f32 = 2000.0;
 const ACCELERATION: f32 = 800.0;
 const MAX_VELOCITY: f32 = 120.0;
 
@@ -20,7 +17,6 @@ pub enum PlayerState {
 
 #[derive(NativeClass)]
 #[inherit(KinematicBody2D)]
-// #[register_with(Self::register_builder)]
 pub struct Player {
     state: PlayerState,
     velocity: Vector2,
@@ -171,16 +167,11 @@ impl Player {
         self.last_hit = Some(Instant::now());
         self.life -= 10.0;
 
-        // Update life in hud
-        let hud = unsafe {
-            base.get_node_as_instance::<hud::Hud>("/root//World/Hud")
-                .unwrap()
-        };
-        hud.map_mut(|x, o| {
+        let state = get_global_state_instance(base);
+        state.map_mut(|x, o| {
             x.update_life(&o, -10.0);
         })
-        .ok()
-        .unwrap_or_else(|| godot_print!("Unable to get hud"));
+        .unwrap();
 
         if self.life <= 0.0 {
             unsafe { base.get_tree().unwrap().assume_safe() }

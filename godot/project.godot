@@ -17,6 +17,7 @@ config/icon="res://assets/godot-ferris-32x32.png"
 [autoload]
 
 PersistentState="*res://scenes/PersistentState.tscn"
+GlobalState="*res://scenes/GlobalState.tscn"
 
 [display]
 
