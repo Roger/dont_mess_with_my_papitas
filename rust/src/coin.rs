@@ -93,13 +93,14 @@ impl Coin {
     }
 
     #[method]
-    fn _on_coin_entered(&mut self, #[base] _base: &Node2D, area: Ref<Area2D>) {
+    fn _on_coin_entered(&mut self, #[base] base: &Node2D, area: Ref<Area2D>) {
         if self.started_at.elapsed().as_millis() < 10 || !self.state.on_floor() {
             return;
         }
         let area = unsafe { area.assume_safe() };
         if area.name().to_string() == "PlayerHurtbox" {
             self.state = State::COLLECTED;
+            base.expect_node::<AudioStreamPlayer2D, _>("Sound").play(0.0);
         }
     }
 }

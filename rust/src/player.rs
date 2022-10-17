@@ -65,7 +65,7 @@ impl Player {
     fn attack_state(&mut self, base: &KinematicBody2D) {
         self.velocity = Vector2::ZERO;
 
-        let animation_tree = unsafe { base.get_node_as::<AnimationTree>("AnimationTree").unwrap() };
+        let animation_tree = base.expect_node::<AnimationTree, _>("AnimationTree");
         let playback = animation_tree.get("parameters/playback");
         let playback = playback
             .try_to_object::<AnimationNodeStateMachinePlayback>()
@@ -125,6 +125,10 @@ impl Player {
 
         if input.is_action_pressed(INPUT_ATTACK, false) {
             self.state = PlayerState::Attack;
+            let sound = base.expect_node::<AudioStreamPlayer2D, _>("AttackSound");
+            if !sound.is_playing() {
+                sound.play(0.0);
+            }
         }
 
         self.velocity =

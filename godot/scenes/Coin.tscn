@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://assets/coin.png" type="Texture" id=1]
 [ext_resource path="res://native/Coin.gdns" type="Script" id=2]
+[ext_resource path="res://assets/monedas.wav" type="AudioStream" id=3]
 
 [sub_resource type="Animation" id=1]
 resource_name = "UpDown"
@@ -37,5 +38,9 @@ anims/UpDown = SubResource( 1 )
 
 [node name="Collision" type="CollisionShape2D" parent="Area"]
 shape = SubResource( 2 )
+
+[node name="Sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
+volume_db = -16.628
 
 [connection signal="area_entered" from="Area" to="." method="_on_coin_entered"]

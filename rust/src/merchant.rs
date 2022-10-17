@@ -65,13 +65,17 @@ impl Merchant {
     fn buy(&self, base: &StaticBody2D) {
         let state = get_global_state_instance(base);
         // let mut removed_seed = false;
-        state.map_mut(|x, o| {
-            if x.coins >= 5 {
-                x.update_seeds(&o, 1);
-                x.update_coins(&o, -5);
-                // removed_seed = true;
-            }
-        }).unwrap();
+        state
+            .map_mut(|x, o| {
+                if x.coins >= 5 {
+                    x.update_seeds(&o, 1);
+                    x.update_coins(&o, -5);
+                    // removed_seed = true;
+                    base.expect_node::<AudioStreamPlayer2D, _>("Sound")
+                        .play(0.0);
+                }
+            })
+            .unwrap();
         // removed_seed
     }
 }

@@ -12,6 +12,7 @@ pub struct Papita {
     life: isize,
     last_hit: Option<Instant>,
     buff: Option<Buff>,
+    is_unplaning: bool,
 }
 
 #[methods]
@@ -21,6 +22,7 @@ impl Papita {
             life: 3,
             last_hit: None,
             buff: None,
+            is_unplaning: false,
         }
     }
 
@@ -65,13 +67,14 @@ impl Papita {
         dirts.add_child(instance, false);
 
         let state = get_global_state_instance(base);
-        state.map_mut(|x, o| {
-            x.update_score(&o, 1);
-            if self.buff.is_some() {
-                x.collect_buff(&o);
-            }
-        })
-        .unwrap();
+        state
+            .map_mut(|x, o| {
+                x.update_score(&o, 1);
+                if self.buff.is_some() {
+                    x.collect_buff(&o);
+                }
+            })
+            .unwrap();
     }
 
     fn try_get_buff(&self, base: &Node2D) -> Option<Buff> {
@@ -82,17 +85,25 @@ impl Papita {
 
     #[method]
     fn _process(&mut self, #[base] base: &Node2D, _delta: f64) {
+        let sound = base.expect_node::<AudioStreamPlayer2D, _>("Sound");
+        match (self.is_unplaning, sound.is_playing()) {
+            (true, true) => {
+                return;
+            }
+            (true, false) => {
+                base.queue_free();
+                return;
+            }
+            (_, _) => (),
+        };
+
         if self.buff.is_none() {
             self.buff = self.try_get_buff(base);
             if let Some(Buff::Heart) = self.buff {
-                base.expect_node::<Sprite, _>("Papita/Buff").set_visible(true);
+                base.expect_node::<Sprite, _>("Papita/Buff")
+                    .set_visible(true);
             }
         }
-
-        // let sprite = base.expect_node::<Sprite, _>("Papita");
-        // if let Some(Buff::Heart) = self.buff {
-        //     sprite.set_modulate(Color::from_rgba(1.2, 0.7, 0.7, 1.0));
-        // }
 
         let reference_rect = base.expect_node::<ReferenceRect, _>("ReferenceRect");
         let player = base.expect_node::<Node2D, _>("/root/World/Playground/Player");
@@ -113,9 +124,9 @@ impl Papita {
         if global_rect.contains_point(mouse_pos) {
             reference_rect.set_editor_only(false);
             if input.is_action_pressed(INPUT_SECOND_ACTION, false) {
-                // let papita = base.expect_node::<Sprite, _>("Papita");
+                self.is_unplaning = true;
+                sound.play(0.0);
                 self.unplant_potato(base);
-                base.queue_free();
             }
         } else {
             reference_rect.set_editor_only(true);

@@ -65,10 +65,9 @@ impl Game {
         let mut spawn_points = self.spawn_points.clone();
 
         // add 1 slime every 3 waves
-        for i in 0..(self.wave / 3) + 1 {
+        for _ in 0..(self.wave / 3) + 1 {
             let amount = spawn_points.len();
             if amount == 0 {
-                println!("Amount: {}", self.wave * i);
                 return;
             }
             let selected = (0..amount).choose(&mut rng).unwrap();
