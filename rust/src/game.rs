@@ -1,4 +1,6 @@
+use crate::joystick::Joytype;
 use crate::node_ext::NodeExt;
+use gdnative::api::object::ConnectFlags;
 use gdnative::api::*;
 use gdnative::prelude::*;
 use rand::prelude::IteratorRandom;
@@ -21,6 +23,15 @@ impl Game {
 
     #[method]
     fn _ready(&mut self, #[base] base: &Node2D) {
+        let input = Input::godot_singleton();
+        input.connect(
+            "joy_connection_changed",
+            unsafe { base.assume_shared() },
+            "_on_joy_connection_changed",
+            VariantArray::new_shared(),
+            ConnectFlags::DEFERRED.into(),
+        ).unwrap();
+
         let spawn_points = base.expect_node::<Node, _>("%SpawnPoints").get_children();
         let spawn_points: Vec<_> = spawn_points
             .iter()
@@ -34,6 +45,11 @@ impl Game {
         self.spawn_points = spawn_points;
         let timer = base.expect_node::<Timer, _>("%Timer");
         timer.start(10.0);
+    }
+
+    #[method]
+    fn _on_joy_connection_changed(&mut self, _device_id: i64, _connected: bool) {
+        dbg!(Joytype::get());
     }
 
     #[method]
