@@ -1,5 +1,8 @@
+use rand::{thread_rng, Rng};
+
 use gdnative::api::*;
 use gdnative::prelude::*;
+use instant::Instant;
 
 use crate::presistent_state::PersistentState;
 
@@ -17,6 +20,21 @@ pub struct GlobalState {
     pub seeds: i32,
     pub score: i32,
     pub collectable_buff: Option<Buff>,
+    #[variant(skip)]
+    last_collectable: Option<Instant>,
+}
+
+impl Default for GlobalState {
+    fn default() -> Self {
+        GlobalState {
+            player_life: 100.0,
+            coins: 0,
+            seeds: 1,
+            score: 0,
+            collectable_buff: None,
+            last_collectable: Some(Instant::now()),
+        }
+    }
 }
 
 #[methods]
@@ -26,17 +44,12 @@ impl GlobalState {
     }
 
     fn new(_base: &Node) -> Self {
-        GlobalState {
-            player_life: 100.0,
-            coins: 0,
-            seeds: 1,
-            score: 0,
-            collectable_buff: None,
-        }
+        Self::default()
     }
 
     #[method]
-    fn _ready(&mut self, #[base] base: &Node) {
+    pub fn reset(&mut self, #[base] base: &Node) {
+        *self = Self::default();
         self.state_changed(base);
     }
 
@@ -51,9 +64,35 @@ impl GlobalState {
     //     }
     // }
 
-    // #[method]
     pub fn get_buff(&mut self) -> Option<Buff> {
-        None
+        // Unwrap is ok, only when converted to variant is set to None
+        if self.collectable_buff.is_some()
+            || self.last_collectable.unwrap().elapsed().as_secs() < 10
+        {
+            return None;
+        }
+
+        let mut rng = thread_rng();
+        if rng.gen_bool(1.0 / 1000.0) {
+            self.collectable_buff = Some(Buff::Heart);
+            self.collectable_buff.clone()
+        } else {
+            None
+        }
+    }
+
+    #[method]
+    pub fn collect_buff(&mut self, #[base] base: &Node) {
+        // Unwrap is ok, only when converted to variant is set to None
+        if let Some(Buff::Heart) = self.collectable_buff {
+            self.last_collectable = Some(Instant::now());
+            self.collectable_buff = None;
+            // Half heart
+            self.player_life = 100.0_f32.min(self.player_life + 100.0 / 3.0 / 2.0);
+            self.state_changed(base);
+        } else {
+            godot_error!("No active buff");
+        }
     }
 
     #[method]

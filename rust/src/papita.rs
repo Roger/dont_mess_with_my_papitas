@@ -1,25 +1,17 @@
+use crate::global_state::Buff;
 use crate::input_const::*;
 use crate::node_ext::NodeExt;
-// use crate::presistent_state::PersistentState;
-use crate::utils::{get_global_state_instance};
-// use crate::utils::reparent_to_hud;
+use crate::utils::get_global_state_instance;
 use gdnative::api::*;
 use gdnative::prelude::*;
 use instant::Instant;
-
-// #[derive(Debug)]
-// enum State {
-//     FLOOR,
-//     FLYING,
-// }
 
 #[derive(NativeClass)]
 #[inherit(Node2D)]
 pub struct Papita {
     life: isize,
     last_hit: Option<Instant>,
-    // state: State,
-    // buff: Option<Buff>,
+    buff: Option<Buff>,
 }
 
 #[methods]
@@ -28,7 +20,7 @@ impl Papita {
         Papita {
             life: 3,
             last_hit: None,
-            // buff: None,
+            buff: None,
         }
     }
 
@@ -72,23 +64,34 @@ impl Papita {
         instance.set_global_position(base.global_position());
         dirts.add_child(instance, false);
 
-        let hud = get_global_state_instance(base);
-        hud.map_mut(|x, o| {
+        let state = get_global_state_instance(base);
+        state.map_mut(|x, o| {
             x.update_score(&o, 1);
+            if self.buff.is_some() {
+                x.collect_buff(&o);
+            }
         })
         .unwrap();
     }
 
-    // fn try_get_buff(&self, base: &Node2D) -> Option<Buff> {
-    //     let data = unsafe { base.get_node_as_instance::<PersistentState>("/root/Data").unwrap() };
-    //     let buff = data.map_mut(|x, _o| x.get_buff()).ok().unwrap();
-    //     buff
-    // }
+    fn try_get_buff(&self, base: &Node2D) -> Option<Buff> {
+        let state = get_global_state_instance(base);
+        let buff = state.map_mut(|x, _o| x.get_buff()).ok().unwrap();
+        buff
+    }
 
     #[method]
     fn _process(&mut self, #[base] base: &Node2D, _delta: f64) {
-        // if self.buff.is_none() {
-        //     self.buff = self.try_get_buff(base);
+        if self.buff.is_none() {
+            self.buff = self.try_get_buff(base);
+            if let Some(Buff::Heart) = self.buff {
+                base.expect_node::<Sprite, _>("Papita/Buff").set_visible(true);
+            }
+        }
+
+        // let sprite = base.expect_node::<Sprite, _>("Papita");
+        // if let Some(Buff::Heart) = self.buff {
+        //     sprite.set_modulate(Color::from_rgba(1.2, 0.7, 0.7, 1.0));
         // }
 
         let reference_rect = base.expect_node::<ReferenceRect, _>("ReferenceRect");

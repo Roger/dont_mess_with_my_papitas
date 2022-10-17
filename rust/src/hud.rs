@@ -3,6 +3,7 @@ use gdnative::prelude::*;
 
 use crate::global_state::GlobalState;
 use crate::node_ext::NodeExt;
+use crate::utils::get_global_state_instance;
 
 #[derive(NativeClass)]
 #[inherit(Node)]
@@ -19,11 +20,7 @@ impl Hud {
         let hearts = base.expect_node::<Sprite, _>("Hearts/Full");
         let rect = Rect2::new(Vector2::new(0.0, 0.0), Vector2::new(48.0, 16.0));
         hearts.set_region_rect(rect);
-
-        let state = unsafe {
-            base.get_node_as_instance::<GlobalState>("/root/GlobalState")
-                .unwrap()
-        };
+        let state = get_global_state_instance(base);
 
         state
             .map_mut(|state, owner| {
@@ -39,19 +36,6 @@ impl Hud {
                 self.on_state_changed(base, state.clone());
             })
             .unwrap();
-
-        // let state = base.get_node("/root/GlobalState").unwrap();
-        // let state = unsafe { state.assume_safe() };
-
-        // state
-        //     .connect(
-        //         "state_changed",
-        //         unsafe { base.assume_shared() },
-        //         "on_state_changed",
-        //         VariantArray::new_shared(),
-        //         0,
-        //     )
-        //     .unwrap();
     }
 
     #[method]

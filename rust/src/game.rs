@@ -1,5 +1,6 @@
 use crate::joystick::Joytype;
 use crate::node_ext::NodeExt;
+use crate::utils::get_global_state_instance;
 use gdnative::api::object::ConnectFlags;
 use gdnative::api::*;
 use gdnative::prelude::*;
@@ -23,6 +24,9 @@ impl Game {
 
     #[method]
     fn _ready(&mut self, #[base] base: &Node2D) {
+        let state = get_global_state_instance(base);
+        state.map_mut(|s, o| s.reset(&o)).unwrap();
+
         let input = Input::godot_singleton();
         input.connect(
             "joy_connection_changed",

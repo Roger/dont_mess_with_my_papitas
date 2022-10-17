@@ -20,7 +20,6 @@ pub enum PlayerState {
 pub struct Player {
     state: PlayerState,
     velocity: Vector2,
-    life: f32,
     last_hit: Option<Instant>,
 }
 
@@ -31,7 +30,6 @@ impl Player {
         Player {
             state: PlayerState::Move,
             velocity: Vector2::ZERO,
-            life: 100.0,
             last_hit: None,
         }
     }
@@ -165,15 +163,14 @@ impl Player {
             return;
         }
         self.last_hit = Some(Instant::now());
-        self.life -= 10.0;
 
         let state = get_global_state_instance(base);
-        state.map_mut(|x, o| {
-            x.update_life(&o, -10.0);
+        let life = state.map_mut(|x, o| {
+            x.update_life(&o, -10.0)
         })
         .unwrap();
 
-        if self.life <= 0.0 {
+        if life <= 0.0 {
             unsafe { base.get_tree().unwrap().assume_safe() }
                 .change_scene("res://scenes/Title.tscn")
                 .unwrap();

@@ -22,7 +22,7 @@ pub fn get_hud_instance<Base: SubClass<Node2D>>(base: &Base) -> TInstance<Hud> {
     unsafe { base.get_node_as_instance::<Hud>("/root/World/Hud") }.unwrap()
 }
 
-pub fn get_global_state_instance<Base: SubClass<Node2D>>(base: &Base) -> TInstance<GlobalState> {
+pub fn get_global_state_instance<Base: SubClass<Node>>(base: &Base) -> TInstance<GlobalState> {
     let base = base.upcast();
     unsafe { base.get_node_as_instance::<GlobalState>("/root/GlobalState") }.unwrap()
 }
