@@ -1,6 +1,6 @@
 [gd_scene load_steps=19 format=2]
 
-[ext_resource path="res://scenes/Fence.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/Sign.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/Background.png" type="Texture" id=3]
 [ext_resource path="res://scenes/Mercader.tscn" type="PackedScene" id=4]
@@ -41,13 +41,22 @@ __meta__ = {
 script = ExtResource( 14 )
 
 [node name="Hearts" parent="Hud" instance=ExtResource( 6 )]
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Coins" parent="Hud" instance=ExtResource( 15 )]
 position = Vector2( 286, 12 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Inventory1" type="Sprite" parent="Hud"]
 position = Vector2( 307, 78 )
 texture = ExtResource( 9 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Seeds" type="Sprite" parent="Hud/Inventory1"]
 texture = ExtResource( 10 )
@@ -63,6 +72,9 @@ text = "1"
 [node name="Inventory2" type="Sprite" parent="Hud"]
 position = Vector2( 307, 102 )
 texture = ExtResource( 9 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Sword" type="Sprite" parent="Hud/Inventory2"]
 position = Vector2( 1, 0 )
@@ -70,6 +82,9 @@ texture = ExtResource( 11 )
 
 [node name="Score" type="Node2D" parent="Hud"]
 position = Vector2( 286, 26 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="ScoreSprite" type="Sprite" parent="Hud/Score"]
 texture = ExtResource( 12 )

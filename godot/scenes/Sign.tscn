@@ -1,8 +1,13 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/PapitasFarmSign.png" type="Texture" id=1]
+[ext_resource path="res://native/Sign.gdns" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 17.5, 13.5 )
 
 [node name="Sign" type="StaticBody2D"]
+script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 0, -28 )
@@ -17,3 +22,12 @@ polygon = PoolVector2Array( -22, -2, -22, -22, -15, -22, -15, -2 )
 position = Vector2( 0, -2 )
 scale = Vector2( 1, 0.25 )
 polygon = PoolVector2Array( 14, -2, 14, -22, 22, -22, 22, -2 )
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( -0.5, -32.5 )
+shape = SubResource( 1 )
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_sign_entered"]
+[connection signal="area_exited" from="Area2D" to="." method="_on_sign_exited"]
