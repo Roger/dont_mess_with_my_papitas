@@ -47,9 +47,13 @@ impl Hud {
     }
 
     pub fn update_life(&self, base: &Node, state: &GlobalState) {
-        let percent = state.player_life * 16.0;
+        let number_hearts = state.player_life.trunc();
+        let heart_width = 12.0;
+        let margin = 4.0;
+        let width = state.player_life * heart_width + number_hearts * margin + margin / 2.0;
+
         let hearts = base.expect_node::<Sprite, _>("Hearts/Full");
-        let rect = Rect2::new(Vector2::new(0.0, 0.0), Vector2::new(percent, 16.0));
+        let rect = Rect2::new(Vector2::new(0.0, 0.0), Vector2::new(width, 16.0));
         hearts.set_region_rect(rect);
     }
 
