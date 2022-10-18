@@ -4,9 +4,22 @@ use gdnative::api::*;
 use gdnative::prelude::*;
 use instant::Instant;
 
+use rand::prelude::IteratorRandom;
 use rand::Rng;
+use strum::AsRefStr;
+use strum::{EnumIter, IntoEnumIterator};
 
 use crate::node_ext::NodeExt;
+
+#[derive(EnumIter, AsRefStr)]
+enum SlimeKind {
+    #[strum(serialize = "orange")]
+    Orange,
+    #[strum(serialize = "green")]
+    Green,
+    #[strum(serialize = "blue")]
+    Blue,
+}
 
 #[derive(NativeClass)]
 #[inherit(KinematicBody2D)]
@@ -16,19 +29,49 @@ pub struct Slime {
     last_flip: Option<Instant>,
     velocity: Vector2,
     target: Option<i64>,
-    life: usize,
+
+    kind: SlimeKind,
+    life: f32,
+    strength: f32,
+    speed: f32,
 }
 
 #[methods]
 impl Slime {
     fn new(_base: &KinematicBody2D) -> Self {
+        let mut rng = rand::thread_rng();
+        let kind = SlimeKind::iter().choose(&mut rng).unwrap();
+
+        let (life, strengh, speed) = match kind {
+            SlimeKind::Orange => (10.0, 2.0, 1.0),
+            SlimeKind::Green => (20.0, 1.0, 1.0),
+            SlimeKind::Blue => (10.0, 1.0, 1.5),
+        };
+
         Slime {
             dying: None,
             velocity: Vector2::ZERO,
             target: None,
-            life: 10,
             last_flip: None,
+            kind,
+            life,
+            strength: strengh,
+            speed,
         }
+    }
+
+    #[method]
+    fn _ready(&mut self, #[base] base: &KinematicBody2D) {
+        let sprite = base.expect_node::<Sprite, _>("Sprite");
+        let tex = load::<Texture>(format!(
+            "res://assets/enemies/slime-{}.png",
+            self.kind.as_ref()
+        ))
+        .unwrap();
+        sprite.set_texture(tex);
+
+        let hitbox = base.expect_node::<Area2D, _>("HitboxEnemy");
+        hitbox.set("strength", self.strength);
     }
 
     fn get_random_target_id(&self, base: &KinematicBody2D) -> Option<i64> {
@@ -153,9 +196,10 @@ impl Slime {
                 animation_player.set_current_animation("Walk");
             }
             let direction = global_pos.direction_to(target_vector);
-            self.velocity = self
-                .velocity
-                .move_toward(direction * 50.0, 100.0 as f32);
+
+            let accel = 50.0 * self.speed;
+
+            self.velocity = self.velocity.move_toward(direction * accel, 100.0 as f32);
             self.velocity =
                 base.move_and_slide(self.velocity, Vector2::ZERO, false, 4, FRAC_PI_4, true);
 

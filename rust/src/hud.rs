@@ -47,7 +47,7 @@ impl Hud {
     }
 
     pub fn update_life(&self, base: &Node, state: &GlobalState) {
-        let percent = 48.0 / 100.0 * state.player_life;
+        let percent = state.player_life * 16.0;
         let hearts = base.expect_node::<Sprite, _>("Hearts/Full");
         let rect = Rect2::new(Vector2::new(0.0, 0.0), Vector2::new(percent, 16.0));
         hearts.set_region_rect(rect);

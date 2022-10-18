@@ -27,7 +27,7 @@ pub struct GlobalState {
 impl Default for GlobalState {
     fn default() -> Self {
         GlobalState {
-            player_life: 100.0,
+            player_life: 3.0,
             coins: 0,
             seeds: 1,
             score: 0,
@@ -88,7 +88,7 @@ impl GlobalState {
             self.last_collectable = Some(Instant::now());
             self.collectable_buff = None;
             // Half heart
-            self.player_life = 100.0_f32.min(self.player_life + 100.0 / 3.0 / 2.0);
+            self.player_life = 3.0_f32.min(self.player_life + 0.5);
             self.state_changed(base);
         } else {
             godot_error!("No active buff");

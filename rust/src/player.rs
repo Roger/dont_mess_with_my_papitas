@@ -168,9 +168,11 @@ impl Player {
         }
         self.last_hit = Some(Instant::now());
 
+        let hit_strength = area.get("strength").try_to::<f32>().unwrap();
+
         let state = get_global_state_instance(base);
         let life = state.map_mut(|x, o| {
-            x.update_life(&o, -10.0)
+            x.update_life(&o, (-1.0 / 4.0) * hit_strength)
         })
         .unwrap();
 
