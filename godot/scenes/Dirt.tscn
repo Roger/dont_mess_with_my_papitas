@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/papitas/TierraFull.png" type="Texture" id=1]
-[ext_resource path="res://assets/TierraSeed.png" type="Texture" id=3]
+[ext_resource path="res://assets/papitas/TierraSeed.png" type="Texture" id=3]
 [ext_resource path="res://scenes/Dirt.gdns" type="Script" id=4]
 
 [node name="Dirt" type="Node2D"]

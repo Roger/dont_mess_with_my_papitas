@@ -4,7 +4,7 @@
 [ext_resource path="res://native/Player.gdns" type="Script" id=2]
 [ext_resource path="res://scenes/Hitbox.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/Hurtbox.tscn" type="PackedScene" id=4]
-[ext_resource path="res://assets/golpe.wav" type="AudioStream" id=5]
+[ext_resource path="res://assets/sounds/golpe.wav" type="AudioStream" id=5]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 4.00002

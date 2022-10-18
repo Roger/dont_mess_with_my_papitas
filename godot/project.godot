@@ -12,7 +12,7 @@ config_version=4
 
 config/name="dmwmp"
 run/main_scene="res://scenes/Title.tscn"
-config/icon="res://assets/godot-ferris-32x32.png"
+config/icon="res://assets/icon/godot-ferris-32x32.png"
 
 [autoload]
 
