@@ -1,4 +1,3 @@
-use crate::global_state;
 use crate::globalscope::lerp;
 use crate::node_ext::NodeExt;
 use crate::utils::get_global_state_instance;

@@ -1,7 +1,6 @@
 use gdnative::prelude::*;
 
 use crate::global_state::GlobalState;
-use crate::hud::Hud;
 use crate::node_ext::NodeExt;
 
 pub fn reparent_to_hud<'a, Base: SubClass<Node2D>>(base: &Base) {
@@ -15,11 +14,6 @@ pub fn reparent_to_hud<'a, Base: SubClass<Node2D>>(base: &Base) {
     let base_ref = unsafe { base.assume_shared() };
     hud.add_child(base_ref, false);
     base.set_global_position(global_pos);
-}
-
-pub fn get_hud_instance<Base: SubClass<Node2D>>(base: &Base) -> TInstance<Hud> {
-    let base = base.upcast();
-    unsafe { base.get_node_as_instance::<Hud>("/root/World/Hud") }.unwrap()
 }
 
 pub fn get_global_state_instance<Base: SubClass<Node>>(base: &Base) -> TInstance<GlobalState> {
