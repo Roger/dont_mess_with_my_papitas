@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://assets/title/MenuFondo.png" type="Texture" id=1]
 [ext_resource path="res://assets/title/NewGame.png" type="Texture" id=2]
@@ -10,6 +10,9 @@
 [ext_resource path="res://assets/title/AboutDisplay.png" type="Texture" id=8]
 [ext_resource path="res://assets/fonts/Pixel Sans Serif.ttf" type="DynamicFontData" id=9]
 [ext_resource path="res://assets/sounds/music.ogg" type="AudioStream" id=10]
+[ext_resource path="res://assets/title/LosCerdosSonLaOndaLoca.png" type="Texture" id=11]
+[ext_resource path="res://assets/title/Almare96.png" type="Texture" id=12]
+[ext_resource path="res://assets/title/IssyOfMars.png" type="Texture" id=13]
 
 [sub_resource type="DynamicFont" id=3]
 size = 8
@@ -92,6 +95,51 @@ texture_hover = ExtResource( 7 )
 texture_disabled = ExtResource( 7 )
 texture_focused = ExtResource( 7 )
 
+[node name="LosCerdosSonLaOndaLoca" type="Sprite" parent="About"]
+visible = false
+position = Vector2( 47, 240 )
+texture = ExtResource( 11 )
+
+[node name="Almare96" type="Sprite" parent="About"]
+visible = false
+position = Vector2( 266, 214 )
+texture = ExtResource( 12 )
+
+[node name="IssyOfMars" type="Sprite" parent="About"]
+visible = false
+position = Vector2( 307, 264 )
+texture = ExtResource( 13 )
+
+[node name="LosCerdosButton" type="Button" parent="About"]
+margin_left = 25.0
+margin_top = 217.0
+margin_right = 37.0
+margin_bottom = 237.0
+rect_scale = Vector2( 1, 0.8 )
+focus_mode = 0
+enabled_focus_mode = 0
+flat = true
+
+[node name="Almare96Button" type="Button" parent="About"]
+margin_left = 231.0
+margin_top = 217.0
+margin_right = 243.0
+margin_bottom = 237.0
+rect_scale = Vector2( 1, 0.8 )
+focus_mode = 0
+enabled_focus_mode = 0
+flat = true
+
+[node name="IssyButton" type="Button" parent="About"]
+margin_left = 278.0
+margin_top = 248.0
+margin_right = 290.0
+margin_bottom = 268.0
+rect_scale = Vector2( 0.8, 0.5 )
+focus_mode = 0
+enabled_focus_mode = 0
+flat = true
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/MoveAboutIn = SubResource( 1 )
 anims/MoveAboutOut = SubResource( 2 )
@@ -102,3 +150,6 @@ autoplay = true
 
 [connection signal="button_up" from="NewGame" to="." method="_on_new_game"]
 [connection signal="button_up" from="About/About" to="." method="_on_about"]
+[connection signal="button_up" from="About/LosCerdosButton" to="." method="_on_cerdos_button_up"]
+[connection signal="button_up" from="About/Almare96Button" to="." method="_on_almare_button_up"]
+[connection signal="button_up" from="About/IssyButton" to="." method="_on_issy_button_up"]

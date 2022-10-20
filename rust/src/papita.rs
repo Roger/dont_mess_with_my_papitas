@@ -85,7 +85,7 @@ impl Papita {
 
     #[method]
     fn _process(&mut self, #[base] base: &Node2D, _delta: f64) {
-        let sound = base.expect_node::<AudioStreamPlayer2D, _>("Sound");
+        let sound = base.expect_node::<AudioStreamPlayer, _>("Sound");
         match (self.is_unplaning, sound.is_playing()) {
             (true, true) => {
                 return;

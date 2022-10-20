@@ -3,8 +3,30 @@ use rand::{thread_rng, Rng};
 use gdnative::api::*;
 use gdnative::prelude::*;
 use instant::Instant;
+use strum::AsRefStr;
+use strum::EnumIter;
 
 use crate::presistent_state::PersistentState;
+
+
+#[derive(EnumIter, AsRefStr, PartialEq, ToVariant, FromVariant, Clone, Debug)]
+pub enum Power {
+    #[strum(serialize = "res://assets/ui/Espada.png")]
+    Attack,
+    #[strum(serialize = "res://assets/ui/Zapatito.png")]
+    Speed,
+    #[strum(serialize = "res://assets/ui/Escudo.png")]
+    Defence,
+    #[strum(serialize = "res://assets/ui/Invisible.png")]
+    Invisibility,
+}
+
+impl Power {
+    pub fn to_texture(&self) -> Ref<Texture> {
+        load::<Texture>(self).unwrap()
+    }
+}
+
 
 #[derive(ToVariant, FromVariant, Debug, Clone)]
 pub enum Buff {
@@ -22,6 +44,9 @@ pub struct GlobalState {
     pub collectable_buff: Option<Buff>,
     #[variant(skip)]
     last_collectable: Option<Instant>,
+    pub power: Option<Power>,
+    #[variant(skip)]
+    last_power: Option<Instant>,
 }
 
 impl Default for GlobalState {
@@ -33,6 +58,8 @@ impl Default for GlobalState {
             score: 0,
             collectable_buff: None,
             last_collectable: Some(Instant::now()),
+            power: None,
+            last_power: None,
         }
     }
 }
@@ -45,6 +72,17 @@ impl GlobalState {
 
     fn new(_base: &Node) -> Self {
         Self::default()
+    }
+
+    #[method]
+    fn _process(&mut self, #[base] base: &Node, _delta: f64) {
+        if let Some(instant) = self.last_power {
+            if instant.elapsed().as_secs() >= 10 {
+                self.last_power = None;
+                self.power = None;
+                self.state_changed(base);
+            }
+        }
     }
 
     #[method]
@@ -79,6 +117,13 @@ impl GlobalState {
         } else {
             None
         }
+    }
+
+    #[method]
+    pub fn set_power(&mut self, #[base] base: &Node, power: Power) {
+        self.power = Some(power);
+        self.last_power = Some(Instant::now());
+        self.state_changed(base);
     }
 
     #[method]

@@ -44,6 +44,7 @@ impl Hud {
         self.update_life(base, &state);
         self.update_score(base, &state);
         self.update_seeds(base, &state);
+        self.update_power(base, &state);
     }
 
     pub fn update_life(&self, base: &Node, state: &GlobalState) {
@@ -70,5 +71,15 @@ impl Hud {
     pub fn update_score(&self, base: &Node, state: &GlobalState) {
         let score = base.expect_node::<Label, _>("Score/Amount");
         score.set_text(state.score.to_string());
+    }
+
+    pub fn update_power(&self, base: &Node, state: &GlobalState) {
+        let sprite = base.expect_node::<Sprite, _>("Inventory2/Sprite");
+        if let Some(power) = &state.power {
+            sprite.set_texture(power.to_texture());
+            sprite.set_visible(true);
+        } else {
+            sprite.set_visible(false);
+        }
     }
 }

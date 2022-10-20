@@ -66,7 +66,7 @@ anims/PapitaUpDown = SubResource( 1 )
 [node name="Collision" parent="Hurtbox" index="0"]
 shape = SubResource( 2 )
 
-[node name="Sound" type="AudioStreamPlayer2D" parent="."]
+[node name="Sound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 8 )
 
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_entered"]
