@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://scenes/Sign.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
@@ -15,6 +15,9 @@
 [ext_resource path="res://native/Game.gdns" type="Script" id=13]
 [ext_resource path="res://native/Hud.gdns" type="Script" id=14]
 [ext_resource path="res://scenes/Coins.tscn" type="PackedScene" id=15]
+[ext_resource path="res://assets/decoration/Bush.png" type="Texture" id=16]
+[ext_resource path="res://assets/decoration/awita.png" type="Texture" id=17]
+[ext_resource path="res://assets/ui/Fences.png" type="Texture" id=18]
 
 [sub_resource type="DynamicFont" id=2]
 size = 6
@@ -24,6 +27,10 @@ font_data = ExtResource( 7 )
 size = 8
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 7 )
+
+[sub_resource type="CapsuleShape2D" id=8]
+radius = 8.0
+height = 4.0
 
 [sub_resource type="DynamicFont" id=4]
 size = 10
@@ -41,6 +48,12 @@ grow_begin = -4.0
 [sub_resource type="StyleBoxLine" id=6]
 color = Color( 0, 0.305882, 0.662745, 1 )
 grow_begin = -4.0
+
+[sub_resource type="RectangleShape2D" id=9]
+extents = Vector2( 2, 15 )
+
+[sub_resource type="RectangleShape2D" id=10]
+extents = Vector2( 18, 3 )
 
 [node name="World" type="Node2D"]
 script = ExtResource( 13 )
@@ -115,22 +128,22 @@ unique_name_in_owner = true
 position = Vector2( -1, 53 )
 
 [node name="Position2D11" type="Position2D" parent="SpawnPoints"]
-position = Vector2( -1, 92 )
+position = Vector2( -1, 84 )
 
 [node name="Position2D2" type="Position2D" parent="SpawnPoints"]
-position = Vector2( -1, 129 )
+position = Vector2( -1, 113 )
 
 [node name="Position2D12" type="Position2D" parent="SpawnPoints"]
-position = Vector2( -1, 169 )
+position = Vector2( -1, 139 )
 
 [node name="Position2D3" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 28, 181 )
+position = Vector2( 56, 181 )
 
 [node name="Position2D13" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 76, 181 )
+position = Vector2( 93, 181 )
 
 [node name="Position2D14" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 116, 181 )
+position = Vector2( 135, 181 )
 
 [node name="Position2D4" type="Position2D" parent="SpawnPoints"]
 position = Vector2( 164, 181 )
@@ -142,10 +155,10 @@ position = Vector2( 204, 181 )
 position = Vector2( 236, 181 )
 
 [node name="Position2D5" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 287, 181 )
+position = Vector2( 291, 181 )
 
 [node name="Position2D6" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 321, 174 )
+position = Vector2( 325, 174 )
 
 [node name="Position2D7" type="Position2D" parent="SpawnPoints"]
 position = Vector2( 321, 98 )
@@ -299,8 +312,47 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="Bush" type="Sprite" parent="Playground"]
+position = Vector2( 270, 60 )
+texture = ExtResource( 16 )
+offset = Vector2( 0, -7 )
+
 [node name="Slimes" type="YSort" parent="Playground"]
 unique_name_in_owner = true
+
+[node name="Bushes" type="Node2D" parent="Playground"]
+position = Vector2( 320, 193 )
+
+[node name="Bush4" type="Sprite" parent="Playground/Bushes"]
+position = Vector2( -6, -26 )
+texture = ExtResource( 16 )
+offset = Vector2( 0, -7 )
+
+[node name="Bush5" type="Sprite" parent="Playground/Bushes"]
+position = Vector2( -18, -21 )
+texture = ExtResource( 16 )
+offset = Vector2( 0, -7 )
+
+[node name="Bush2" type="Sprite" parent="Playground/Bushes"]
+position = Vector2( -7, -13 )
+texture = ExtResource( 16 )
+offset = Vector2( 0, -7 )
+
+[node name="Bush3" type="Sprite" parent="Playground/Bushes"]
+position = Vector2( -22, -14 )
+texture = ExtResource( 16 )
+offset = Vector2( 0, -7 )
+
+[node name="Awita" type="StaticBody2D" parent="Playground"]
+position = Vector2( 32, 143 )
+
+[node name="Sprite" type="Sprite" parent="Playground/Awita"]
+position = Vector2( 0, -4 )
+texture = ExtResource( 17 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Playground/Awita"]
+position = Vector2( 0, -3 )
+shape = SubResource( 8 )
 
 [node name="Paused" type="Node2D" parent="."]
 pause_mode = 2
@@ -343,5 +395,38 @@ custom_styles/slider = SubResource( 5 )
 custom_styles/grabber_area_highlight = SubResource( 7 )
 custom_styles/grabber_area = SubResource( 6 )
 ticks_on_borders = true
+
+[node name="Fences" type="StaticBody2D" parent="."]
+position = Vector2( 4, 162 )
+
+[node name="VFence" type="Sprite" parent="Fences"]
+texture = ExtResource( 18 )
+region_enabled = true
+region_rect = Rect2( 36, 0, 36, 36 )
+
+[node name="HFence" type="Sprite" parent="Fences"]
+position = Vector2( 9, 10 )
+texture = ExtResource( 18 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 36, 36 )
+
+[node name="HFence2" type="Sprite" parent="Fences"]
+position = Vector2( 26, 10 )
+texture = ExtResource( 18 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 36, 36 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fences"]
+position = Vector2( 0, 1 )
+shape = SubResource( 9 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Fences"]
+position = Vector2( 20, 13 )
+shape = SubResource( 10 )
+
+[node name="Bush6" type="Sprite" parent="Fences"]
+position = Vector2( 43, 17 )
+texture = ExtResource( 16 )
+offset = Vector2( 0, -7 )
 
 [connection signal="timeout" from="Timer" to="." method="_on_timeout"]

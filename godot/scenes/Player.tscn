@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=2]
+[gd_scene load_steps=45 format=2]
 
 [ext_resource path="res://assets/player/ReadyAmendola1.png" type="Texture" id=1]
 [ext_resource path="res://native/Player.gdns" type="Script" id=2]
@@ -689,29 +689,6 @@ nodes/TimeScale/position = Vector2( 380, 40 )
 nodes/output/position = Vector2( 600, 60 )
 node_connections = [ "output", 0, "TimeScale", "TimeScale", 0, "BlendSpace2D" ]
 
-[sub_resource type="AnimationNodeAnimation" id=33]
-animation = "AttackDown"
-
-[sub_resource type="AnimationNodeAnimation" id=34]
-animation = "AttackUp"
-
-[sub_resource type="AnimationNodeAnimation" id=35]
-animation = "AttackLeft"
-
-[sub_resource type="AnimationNodeAnimation" id=36]
-animation = "AttackRight"
-
-[sub_resource type="AnimationNodeBlendSpace2D" id=30]
-blend_point_0/node = SubResource( 33 )
-blend_point_0/pos = Vector2( 0, 1 )
-blend_point_1/node = SubResource( 34 )
-blend_point_1/pos = Vector2( 0, -1 )
-blend_point_2/node = SubResource( 35 )
-blend_point_2/pos = Vector2( -1, 0 )
-blend_point_3/node = SubResource( 36 )
-blend_point_3/pos = Vector2( 1, 0 )
-blend_mode = 1
-
 [sub_resource type="AnimationNodeAnimation" id=13]
 animation = "IdleDown"
 
@@ -771,8 +748,6 @@ blend_mode = 1
 [sub_resource type="AnimationNodeStateMachine" id=5]
 states/Attack/node = SubResource( 51 )
 states/Attack/position = Vector2( 175, 159 )
-states/Attack2/node = SubResource( 30 )
-states/Attack2/position = Vector2( -34, 103 )
 states/Idle/node = SubResource( 14 )
 states/Idle/position = Vector2( 180, 38 )
 states/Walk/node = SubResource( 18 )
@@ -827,7 +802,6 @@ anim_player = NodePath("../AnimationPlayer")
 parameters/playback = SubResource( 6 )
 parameters/Attack/BlendSpace2D/blend_position = Vector2( 0, 0 )
 parameters/Attack/TimeScale/scale = 1.0
-parameters/Attack2/blend_position = Vector2( 0, 0 )
 parameters/Idle/blend_position = Vector2( -0.00317967, 0.791908 )
 parameters/Walk/blend_position = Vector2( 0.00158978, 0.0699422 )
 
