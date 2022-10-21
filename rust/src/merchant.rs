@@ -84,7 +84,6 @@ impl Merchant {
         } else {
             self.handle_joystick(base);
         }
-
     }
 
     fn handle_keyboard(&mut self, base: &StaticBody2D) {
@@ -136,8 +135,7 @@ impl Merchant {
                 if x.coins >= 5 {
                     x.update_seeds(&o, 1);
                     x.update_coins(&o, -5);
-                    base.expect_node::<AudioStreamPlayer, _>("Sound")
-                        .play(0.0);
+                    base.expect_node::<AudioStreamPlayer, _>("Sound").play(0.0);
                 }
             })
             .unwrap();
@@ -151,12 +149,75 @@ impl Merchant {
                     self.sold = true;
                     x.set_power(&o, self.power.clone());
                     x.update_coins(&o, -5);
-                    base.expect_node::<AudioStreamPlayer, _>("Sound")
-                        .play(0.0);
+                    base.expect_node::<AudioStreamPlayer, _>("Sound").play(0.0);
                     base.expect_node::<Sprite, _>("Inventory2/Sprite")
                         .set_visible(false);
                 }
             })
             .unwrap();
+    }
+}
+
+#[derive(NativeClass)]
+#[inherit(Node2D)]
+pub struct MerchantEye {
+    position: f32,
+}
+
+#[methods]
+impl MerchantEye {
+    fn new(_base: &Node2D) -> Self {
+        MerchantEye { position: 0.0 }
+    }
+
+    fn get_player_pos(&self, base: &Node2D) -> Option<Vector2> {
+        unsafe {
+            let parent = base.get_parent().unwrap().assume_safe();
+            let node = parent
+                .get_node("/root/World/Playground/Player")?
+                .assume_safe()
+                .cast::<Node2D>()
+                .unwrap();
+            Some(node.global_position())
+        }
+    }
+
+    #[method]
+    fn _draw(&self, #[base] base: &Node2D) {
+        base.draw_rect(
+            Rect2::new(Vector2::new(self.position, 0.0), Vector2::new(1.65, 1.65)),
+            Color::from_html("22aa8a").unwrap(),
+            true,
+            1.0,
+            false,
+        );
+
+        base.draw_rect(
+            Rect2::new(
+                Vector2::new(self.position + 4.0, 0.0),
+                Vector2::new(1.65, 1.65),
+            ),
+            Color::from_html("22aa8a").unwrap(),
+            true,
+            1.0,
+            false,
+        );
+    }
+
+    #[method]
+    fn _process(&mut self, #[base] base: &Node2D, _delta: f64) {
+        let global_pos = base.global_position();
+        let mut position = self.position;
+        if let Some(pos) = self.get_player_pos(base) {
+            let x = pos.x - global_pos.x;
+            let x = x.max(-10.4f32).min(8.8);
+            position = x / 10.0;
+        }
+
+        // If the position changed, redraw
+        if self.position != position {
+            self.position = position;
+            base.update();
+        }
     }
 }

@@ -36,6 +36,7 @@ fn init(handle: InitHandle) {
     handle.add_class::<coin::Coin>();
     handle.add_class::<dirt::Dirt>();
     handle.add_class::<merchant::Merchant>();
+    handle.add_class::<merchant::MerchantEye>();
 }
 
 // macros that create the entry-points of the dynamic library.

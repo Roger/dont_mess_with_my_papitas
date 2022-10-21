@@ -1,7 +1,8 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://assets/title/MenuFondo.png" type="Texture" id=1]
 [ext_resource path="res://assets/papitas/PapitaWhite.png" type="Texture" id=2]
+[ext_resource path="res://assets/sounds/papita_out.wav" type="AudioStream" id=3]
 [ext_resource path="res://native/Title.gdns" type="Script" id=4]
 [ext_resource path="res://assets/title/AboutDisplay.png" type="Texture" id=8]
 [ext_resource path="res://assets/fonts/Pixel Sans Serif.ttf" type="DynamicFontData" id=9]
@@ -327,6 +328,10 @@ anims/MoveHowtoOut = SubResource( 7 )
 stream = ExtResource( 10 )
 autoplay = true
 bus = "Music"
+
+[node name="EEA" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+volume_db = -6.992
 
 [connection signal="button_up" from="NewGame" to="." method="_on_new_game"]
 [connection signal="button_up" from="HowToPlay/HowToPlay" to="." method="_on_howto"]
