@@ -136,6 +136,8 @@ impl Merchant {
                     x.update_seeds(&o, 1);
                     x.update_coins(&o, -5);
                     base.expect_node::<AudioStreamPlayer, _>("Sound").play(0.0);
+                } else {
+                    base.expect_node::<AudioStreamPlayer, _>("Error").play(0.0);
                 }
             })
             .unwrap();
@@ -152,6 +154,8 @@ impl Merchant {
                     base.expect_node::<AudioStreamPlayer, _>("Sound").play(0.0);
                     base.expect_node::<Sprite, _>("Inventory2/Sprite")
                         .set_visible(false);
+                } else {
+                    base.expect_node::<AudioStreamPlayer, _>("Error").play(0.0);
                 }
             })
             .unwrap();
