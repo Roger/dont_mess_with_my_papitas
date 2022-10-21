@@ -72,7 +72,12 @@ impl Title {
     }
 
     #[method]
-    fn _on_joy_connection_changed(&mut self, #[base] base: &Control, _device_id: i64, _connected: bool) {
+    fn _on_joy_connection_changed(
+        &mut self,
+        #[base] base: &Control,
+        _device_id: i64,
+        _connected: bool,
+    ) {
         self.joytype = Joytype::get();
         self.handle_show_papita(base);
     }
@@ -103,7 +108,7 @@ impl Title {
     }
 
     fn handle_hover(&self, base: &Control, button_name: &str) {
-        let button= base.expect_node::<Button, _>(button_name);
+        let button = base.expect_node::<Button, _>(button_name);
         let outline = if button.is_hovered() { 1 } else { 0 };
 
         let font = button
@@ -147,6 +152,9 @@ impl Title {
     #[method]
     fn _on_about(&mut self, #[base] base: &Control) {
         let animation_player = base.expect_node::<AnimationPlayer, _>("AnimationPlayer");
+        if animation_player.is_playing() {
+            return;
+        }
         match self.showing {
             Showing::About => {
                 animation_player.set_current_animation("MoveAboutOut");
@@ -168,6 +176,9 @@ impl Title {
     #[method]
     fn _on_howto(&mut self, #[base] base: &Control) {
         let animation_player = base.expect_node::<AnimationPlayer, _>("AnimationPlayer");
+        if animation_player.is_playing() {
+            return;
+        }
         match self.showing {
             Showing::About => {
                 animation_player.set_current_animation("MoveHowtoInFromAbout");
@@ -189,27 +200,34 @@ impl Title {
     #[method]
     fn _on_cerdos_button_up(&mut self, #[base] base: &Control) {
         self.cerdos += 1;
-        if self.cerdos >= 10 {
-            base.expect_node::<Sprite, _>("About/LosCerdosSonLaOndaLoca")
-                .set_visible(true);
+        let sprite = base.expect_node::<Sprite, _>("About/LosCerdosSonLaOndaLoca");
+
+        if !sprite.is_visible() {
+            base.expect_node::<AudioStreamPlayer, _>("EEA").play(0.0);
         }
+        sprite.set_visible(self.cerdos >= 10);
     }
 
     #[method]
     fn _on_almare_button_up(&mut self, #[base] base: &Control) {
         self.almare += 1;
-        if self.almare >= 96 {
-            base.expect_node::<Sprite, _>("About/Almare96")
-                .set_visible(true);
+        let sprite = base.expect_node::<Sprite, _>("About/Almare96");
+
+        if !sprite.is_visible() {
+            base.expect_node::<AudioStreamPlayer, _>("EEA").play(0.0);
         }
+        sprite.set_visible(self.almare >= 96);
     }
 
     #[method]
     fn _on_issy_button_up(&mut self, #[base] base: &Control) {
         self.issy += 1;
-        if self.issy >= 10 {
-            base.expect_node::<Sprite, _>("About/IssyOfMars")
-                .set_visible(true);
+        let sprite = base.expect_node::<Sprite, _>("About/IssyOfMars");
+
+        if !sprite.is_visible() {
+            base.expect_node::<AudioStreamPlayer, _>("EEA").play(0.0);
         }
+        sprite.set_visible(self.issy >= 10);
+
     }
 }
