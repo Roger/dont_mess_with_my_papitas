@@ -51,10 +51,10 @@ impl Coin {
         match self.state {
             State::FLOOR => {
                 match self.started_at.elapsed().as_millis() {
-                    // On 10 seconds remove the coin
-                    10000.. => base.queue_free(),
+                    // On 6 seconds remove the coin
+                    6000.. => base.queue_free(),
                     // Oscillate transparency in the last 2 seconds
-                    millis @ 8000..=9999 => {
+                    millis @ 3000..=6999 => {
                         let alpha = (millis as f32 % 150.0) / 250.0 + 0.3;
                         sprite.set_modulate(Color::from_rgba(1.0, 1.0, 1.0, alpha));
                     }
