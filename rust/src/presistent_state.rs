@@ -30,7 +30,8 @@ impl PersistentState {
 
     fn save(&self) {
         let file = File::new();
-        file.open("user://savefile.json", ModeFlags::WRITE.into()).unwrap();
+        file.open("user://savefile.json", ModeFlags::WRITE.into())
+            .unwrap();
         file.store_string(serde_json::to_string_pretty(self).unwrap());
     }
 

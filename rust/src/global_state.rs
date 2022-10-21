@@ -8,7 +8,6 @@ use strum::EnumIter;
 
 use crate::presistent_state::PersistentState;
 
-
 #[derive(EnumIter, AsRefStr, PartialEq, ToVariant, FromVariant, Clone, Debug)]
 pub enum Power {
     #[strum(serialize = "res://assets/ui/Espada.png")]
@@ -26,7 +25,6 @@ impl Power {
         load::<Texture>(self).unwrap()
     }
 }
-
 
 #[derive(ToVariant, FromVariant, Debug, Clone)]
 pub enum Buff {

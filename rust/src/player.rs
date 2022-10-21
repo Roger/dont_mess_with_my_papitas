@@ -150,7 +150,10 @@ impl Player {
 
             animation_tree.set("parameters/Idle/blend_position", input_vector);
             animation_tree.set("parameters/Walk/blend_position", input_vector);
-            animation_tree.set("parameters/Attack/BlendSpace2D/blend_position", input_vector);
+            animation_tree.set(
+                "parameters/Attack/BlendSpace2D/blend_position",
+                input_vector,
+            );
             animation_tree.set("parameters/Attack/TimeScale/scale", 1.3 * speed_boost);
 
             hitbox.set("knockback", input_vector);
@@ -225,9 +228,7 @@ impl Player {
         let defence_boost = self.defence_boost(base);
         let state = get_global_state_instance(base);
         let life = state
-            .map_mut(|x, o| {
-                x.update_life(&o, ((-1.0 / 4.0) / defence_boost) * hit_strength)
-            })
+            .map_mut(|x, o| x.update_life(&o, ((-1.0 / 4.0) / defence_boost) * hit_strength))
             .unwrap();
 
         if life <= 0.0 {

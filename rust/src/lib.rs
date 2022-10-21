@@ -1,22 +1,22 @@
-mod utils;
-mod presistent_state;
-mod joystick;
-mod global_state;
-mod title;
-mod sign;
-mod hitbox;
-mod paused;
-mod game;
-mod hud;
-mod player;
-mod merchant;
-mod papita;
-mod slime;
 mod coin;
 mod dirt;
+mod game;
+mod global_state;
 mod globalscope;
-mod node_ext;
+mod hitbox;
+mod hud;
 mod input_const;
+mod joystick;
+mod merchant;
+mod node_ext;
+mod papita;
+mod paused;
+mod player;
+mod presistent_state;
+mod sign;
+mod slime;
+mod title;
+mod utils;
 
 use gdnative::prelude::{godot_init, InitHandle, Variant};
 

@@ -99,7 +99,8 @@ impl Coin {
         let area = unsafe { area.assume_safe() };
         if area.name().to_string() == "PlayerHurtbox" {
             self.state = State::COLLECTED;
-            base.expect_node::<AudioStreamPlayer2D, _>("Sound").play(0.0);
+            base.expect_node::<AudioStreamPlayer2D, _>("Sound")
+                .play(0.0);
         }
     }
 }

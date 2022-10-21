@@ -29,13 +29,15 @@ impl Game {
         state.map_mut(|s, o| s.reset(&o)).unwrap();
 
         let input = Input::godot_singleton();
-        input.connect(
-            "joy_connection_changed",
-            unsafe { base.assume_shared() },
-            "_on_joy_connection_changed",
-            VariantArray::new_shared(),
-            ConnectFlags::DEFERRED.into(),
-        ).unwrap();
+        input
+            .connect(
+                "joy_connection_changed",
+                unsafe { base.assume_shared() },
+                "_on_joy_connection_changed",
+                VariantArray::new_shared(),
+                ConnectFlags::DEFERRED.into(),
+            )
+            .unwrap();
 
         let spawn_points = base.expect_node::<Node, _>("%SpawnPoints").get_children();
         let spawn_points: Vec<_> = spawn_points

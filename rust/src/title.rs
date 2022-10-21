@@ -228,6 +228,5 @@ impl Title {
             base.expect_node::<AudioStreamPlayer, _>("EEA").play(0.0);
         }
         sprite.set_visible(self.issy >= 10);
-
     }
 }
