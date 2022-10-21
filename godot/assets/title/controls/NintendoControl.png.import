@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/OptionsDesactivadas.png-ed7439b5bfed998bbc7008874593b84b.stex"
+path="res://.import/NintendoControl.png-ae6558dc9ed6242054168cba1cd9dd9e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/title/OptionsDesactivadas.png"
-dest_files=[ "res://.import/OptionsDesactivadas.png-ed7439b5bfed998bbc7008874593b84b.stex" ]
+source_file="res://assets/title/controls/NintendoControl.png"
+dest_files=[ "res://.import/NintendoControl.png-ae6558dc9ed6242054168cba1cd9dd9e.stex" ]
 
 [params]
 

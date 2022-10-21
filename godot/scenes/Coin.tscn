@@ -42,5 +42,6 @@ shape = SubResource( 2 )
 [node name="Sound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 3 )
 volume_db = -16.628
+bus = "SFX"
 
 [connection signal="area_entered" from="Area" to="." method="_on_coin_entered"]

@@ -7,6 +7,7 @@ use strum::IntoEnumIterator;
 
 use crate::global_state::Power;
 use crate::input_const::*;
+use crate::joystick::Joytype;
 use crate::node_ext::NodeExt;
 use crate::utils::get_global_state_instance;
 
@@ -74,9 +75,19 @@ impl Merchant {
             power_sprite.set_visible(true);
         }
 
-        let seeds_rect = base.expect_node::<ReferenceRect, _>("Inventory1/ReferenceRect");
-        let power_rect = base.expect_node::<ReferenceRect, _>("Inventory2/ReferenceRect");
+        if !self.player_close {
+            return;
+        }
 
+        if Joytype::get().is_keyboard() {
+            self.handle_keyboard(base);
+        } else {
+            self.handle_joystick(base);
+        }
+
+    }
+
+    fn handle_keyboard(&mut self, base: &StaticBody2D) {
         let seeds_sprite = base.expect_node::<Sprite, _>("Inventory1/Sprite");
         let power_sprite = base.expect_node::<Sprite, _>("Inventory2/Sprite");
 
@@ -86,20 +97,19 @@ impl Merchant {
         let viewport = unsafe { viewport.assume_safe() };
         let mouse_pos = viewport.get_mouse_position();
 
-        let global_seeds_rect = seeds_rect.get_global_rect();
-        let global_power_rect = power_rect.get_global_rect();
-
         seeds_sprite.set_scale(Vector2::new(0.6, 0.6));
         power_sprite.set_scale(Vector2::new(0.6, 0.6));
 
-        if !self.player_close {
-            return;
-        }
+        let seeds_rect = base.expect_node::<ReferenceRect, _>("Inventory1/ReferenceRect");
+        let power_rect = base.expect_node::<ReferenceRect, _>("Inventory2/ReferenceRect");
+
+        let global_seeds_rect = seeds_rect.get_global_rect();
+        let global_power_rect = power_rect.get_global_rect();
 
         if global_seeds_rect.contains_point(mouse_pos) {
             seeds_sprite.set_scale(Vector2::new(0.8, 0.8));
             if input.is_action_just_released(INPUT_SECOND_ACTION, false) {
-                self.buy(base);
+                self.buy_seed(base);
             }
         } else if global_power_rect.contains_point(mouse_pos) {
             power_sprite.set_scale(Vector2::new(0.8, 0.8));
@@ -109,7 +119,17 @@ impl Merchant {
         }
     }
 
-    fn buy(&self, base: &StaticBody2D) {
+    fn handle_joystick(&mut self, base: &StaticBody2D) {
+        let input = Input::godot_singleton();
+
+        if input.is_action_just_released(INPUT_THIRD_ACTION, false) {
+            self.buy_seed(base);
+        } else if input.is_action_just_released(INPUT_FORTH_ACTION, false) {
+            self.buy_power(base);
+        }
+    }
+
+    fn buy_seed(&self, base: &StaticBody2D) {
         let state = get_global_state_instance(base);
         state
             .map_mut(|x, o| {

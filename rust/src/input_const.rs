@@ -4,3 +4,5 @@ pub const INPUT_UP: &str = "ui_up";
 pub const INPUT_DOWN: &str = "ui_down";
 pub const INPUT_ATTACK: &str = "attack";
 pub const INPUT_SECOND_ACTION: &str = "second_action";
+pub const INPUT_THIRD_ACTION: &str = "third_action";
+pub const INPUT_FORTH_ACTION: &str = "forth_action";

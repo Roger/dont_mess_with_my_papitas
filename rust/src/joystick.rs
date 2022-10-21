@@ -20,6 +20,13 @@ impl Joytype {
             _ => Joytype::Xbox,
         }
     }
+
+    pub fn is_keyboard(&self) -> bool {
+        match self {
+            Joytype::Keyboard => true,
+            _ => false,
+        }
+    }
 }
 
 fn is_psx(name: &str) -> bool {

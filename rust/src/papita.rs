@@ -1,5 +1,6 @@
 use crate::global_state::Buff;
 use crate::input_const::*;
+use crate::joystick::Joytype;
 use crate::node_ext::NodeExt;
 use crate::utils::get_global_state_instance;
 use gdnative::api::*;
@@ -13,6 +14,7 @@ pub struct Papita {
     last_hit: Option<Instant>,
     buff: Option<Buff>,
     is_unplaning: bool,
+    player_inside: bool,
 }
 
 #[methods]
@@ -23,6 +25,7 @@ impl Papita {
             last_hit: None,
             buff: None,
             is_unplaning: false,
+            player_inside: false,
         }
     }
 
@@ -105,6 +108,14 @@ impl Papita {
             }
         }
 
+        if Joytype::get().is_keyboard() {
+            self.handle_keyboard(base, sound);
+        } else {
+            self.handle_joystick(base, sound);
+        }
+    }
+
+    fn handle_keyboard(&mut self, base: &Node2D, sound: TRef<AudioStreamPlayer>) {
         let reference_rect = base.expect_node::<ReferenceRect, _>("ReferenceRect");
         let player = base.expect_node::<Node2D, _>("/root/World/Playground/Player");
         let player_pos = player.global_position();
@@ -131,15 +142,38 @@ impl Papita {
         } else {
             reference_rect.set_editor_only(true);
         }
+    }
 
-        // match self.state {
-        //     State::FLOOR => (),
-        //     // Reparent to hud on collect, to make the coin
-        //     // on top of everything while flying
-        //     State::COLLECTED => {
-        //         reparent_to_hud(base);
-        //         self.state = State::FLYING;
-        //     }
-        // }
+    fn handle_joystick(&mut self, base: &Node2D, sound: TRef<AudioStreamPlayer>) {
+        let reference_rect = base.expect_node::<ReferenceRect, _>("ReferenceRect");
+        if self.player_inside {
+            reference_rect.set_editor_only(false);
+        } else {
+            reference_rect.set_editor_only(true);
+            return;
+        }
+        let input = Input::godot_singleton();
+
+        if input.is_action_pressed(INPUT_SECOND_ACTION, false) {
+            self.is_unplaning = true;
+            sound.play(0.0);
+            self.unplant_potato(base);
+        }
+    }
+
+    #[method]
+    fn _on_area_entered(&mut self, #[base] _base: &Node2D, area: Ref<Area2D>) {
+        let area = unsafe { area.assume_safe() };
+        if area.name().to_string() == "PlayerPointer" {
+            self.player_inside = true;
+        }
+    }
+
+    #[method]
+    fn _on_area_exited(&mut self, #[base] _base: &Node2D, area: Ref<Area2D>) {
+        let area = unsafe { area.assume_safe() };
+        if area.name().to_string() == "PlayerPointer" {
+            self.player_inside = false;
+        }
     }
 }

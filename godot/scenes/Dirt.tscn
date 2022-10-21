@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/papitas/TierraFull.png" type="Texture" id=1]
 [ext_resource path="res://assets/papitas/TierraSeed.png" type="Texture" id=3]
 [ext_resource path="res://scenes/Dirt.gdns" type="Script" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 7, 7 )
 
 [node name="Dirt" type="Node2D"]
 script = ExtResource( 4 )
@@ -25,4 +28,12 @@ border_width = 1.1
 [node name="Timer" type="Timer" parent="."]
 wait_time = 10.0
 
+[node name="Area2D" type="Area2D" parent="."]
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 1 )
+
 [connection signal="timeout" from="Timer" to="." method="_on_timeout"]
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_entered"]
+[connection signal="area_exited" from="Area2D" to="." method="_on_area_exited"]

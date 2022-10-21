@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/AboutSelect.png-b2668bd36cfc6cd4fc07cb0523d0342b.stex"
+path="res://.import/PlayControl.png-16f818fbb03cdcf3e5e7b0ee1ac44b64.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/AboutSelect.png"
-dest_files=[ "res://.import/AboutSelect.png-b2668bd36cfc6cd4fc07cb0523d0342b.stex" ]
+source_file="res://assets/title/controls/PlayControl.png"
+dest_files=[ "res://.import/PlayControl.png-16f818fbb03cdcf3e5e7b0ee1ac44b64.stex" ]
 
 [params]
 

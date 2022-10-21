@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/AboutSelect.png-35c3c21e009dd644775a6b4848ebf219.stex"
+path="res://.import/XBoxControl.png-47c6267b689219a4babf8dee4faaea01.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/title/AboutSelect.png"
-dest_files=[ "res://.import/AboutSelect.png-35c3c21e009dd644775a6b4848ebf219.stex" ]
+source_file="res://assets/title/controls/XBoxControl.png"
+dest_files=[ "res://.import/XBoxControl.png-47c6267b689219a4babf8dee4faaea01.stex" ]
 
 [params]
 
